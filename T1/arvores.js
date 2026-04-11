@@ -25,11 +25,15 @@ window.addEventListener( 'resize', function(){onWindowResize(camera, renderer)},
 let axesHelper = new THREE.AxesHelper( 12 );
 scene.add( axesHelper );
 
-let plane = createGroundPlaneWired(100, 100, 50, 50);
+let plane = createGroundPlaneWired(100, 100, 50, 50); // plano azul quadriculado
 scene.add(plane);
 
-let arvore = criaArvoreFrutos(0, 0, 'firebrick');
-scene.add(arvore);
+let arvore1 = criaArvoreBase(-7, 0);
+scene.add(arvore1);
+let arvore2 = criaArvoreFrutos(7, 0, 'firebrick');
+scene.add(arvore2);
+let arvore3 = criaArvoreNeve(0, 0);
+scene.add(arvore3);
 
 // Use this to show information onscreen
 let controls = new InfoBox();
@@ -77,15 +81,15 @@ function posicionaFrutos(x, y, z, corFruto) // ajuda a posicionar os frutos na a
   let frutosGeometry = new THREE.SphereGeometry(0.3, 32, 32);
   let fruto = new THREE.Mesh(frutosGeometry, materialFrutos);
   fruto.position.set(x, y, z);
-  return fruto;
+  return fruto; // retorna o fruto pronto p ser adicionado
 }
 
 function criaArvoreFrutos(x, z, corFruto) // cria arvore de frutos, escolhendo a cor do fruto
 {
-  let arvore = criaArvoreBase(x, z); // usa a arvore base
+  let arvore = criaArvoreBase(x, z); // cria a arvore base
   
-  arvore.add(posicionaFrutos(0.7, 6, 0.7, corFruto));
-  arvore.add(posicionaFrutos(-1, 4.7, 1, corFruto));
+  arvore.add(posicionaFrutos(0.7, 6, 0.7, corFruto)); // usa a funcao para escolher a posicao dos frutos
+  arvore.add(posicionaFrutos(-1, 4.7, 1, corFruto)); // e os adiciona a arvore criada (objeto 3D)
   arvore.add(posicionaFrutos(1.25, 3.2, 1.25, corFruto));
   arvore.add(posicionaFrutos(-1.25, 4.2, -1.25, corFruto));
   arvore.add(posicionaFrutos(0.85, 5.7, -0.85, corFruto));
@@ -93,6 +97,31 @@ function criaArvoreFrutos(x, z, corFruto) // cria arvore de frutos, escolhendo a
   arvore.add(posicionaFrutos(-1.6, 2.4, 1.6, corFruto));
   arvore.add(posicionaFrutos(-0.5, 6.5, -0.5, corFruto));
   
+  return arvore;
+}
+
+function criaArvoreNeve(x, z) // cria arvore com neve
+{
+  let arvore = criaArvoreBase(x, z, 'darkgreen'); // arvore base com verde mais escuro
+  let materialNeve = setDefaultMaterial('snow');
+
+  let nevePontaGeometry = new THREE.ConeGeometry(0.6, 1, 32); // pontinha da arvore com neve
+  let nevePonta = new THREE.Mesh(nevePontaGeometry, materialNeve);
+  nevePonta.position.set(0.0, 7.26, 0.0);
+  arvore.add(nevePonta);
+  let neveTopoGeometry = new THREE.CylinderGeometry(1.2, 1.5, 0.5, 32); // neve da borda das folhas de cima
+  let neveTopo = new THREE.Mesh(neveTopoGeometry, materialNeve);
+  neveTopo.position.set(0.0, 5.51, 0.0); // 0.01 mais p cima p nao bugar
+  arvore.add(neveTopo);
+  let neveMeioGeometry = new THREE.CylinderGeometry(1.71, 2, 0.5, 32); // neve da borda das folhas do meio
+  let neveMeio = new THREE.Mesh(neveMeioGeometry, materialNeve);
+  neveMeio.position.set(0.0, 4.01, 0.0);
+  arvore.add(neveMeio);
+  let neveBaseGeometry = new THREE.CylinderGeometry(2.22, 2.5, 0.5, 32); // neve da borda das folhas de baixo
+  let neveBase = new THREE.Mesh(neveBaseGeometry, materialNeve);
+  neveBase.position.set(0.0, 2.26, 0.0);
+  arvore.add(neveBase); // adiciona as neves na arvore base
+
   return arvore;
 }
 
