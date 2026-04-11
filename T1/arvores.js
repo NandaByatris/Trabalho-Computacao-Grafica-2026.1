@@ -25,15 +25,19 @@ window.addEventListener( 'resize', function(){onWindowResize(camera, renderer)},
 let axesHelper = new THREE.AxesHelper( 12 );
 scene.add( axesHelper );
 
-let plane = createGroundPlaneWired(100, 100, 50, 50); // plano azul quadriculado
+let plane = createGroundPlaneWired(100, 100, 50, 50, 5, 'darkgreen', 'green'); // plano quadriculado verde
 scene.add(plane);
 
-let arvore1 = criaArvoreBase(-7, 0);
+let arvore1 = criaArvoreBase(-7, -7); // arvore normal (verao?)
 scene.add(arvore1);
-let arvore2 = criaArvoreFrutos(7, 0, 'firebrick');
+let arvore2 = criaArvoreFrutos(7, -7, 'firebrick'); // arvore de maça (primavera?)
 scene.add(arvore2);
-let arvore3 = criaArvoreNeve(0, 0);
+let arvore3 = criaArvoreFrutos(7, 0, 'chocolate'); // arvore de laranja (primavera?)
 scene.add(arvore3);
+let arvore4 = criaArvoreNeve(-7, 0); //arvore com neve (inverno)
+scene.add(arvore4);
+let arvore5 = criaArvoreBase(0, 0, 'darkgoldenrod', 'sienna'); // arvore outono
+scene.add(arvore5);
 
 // Use this to show information onscreen
 let controls = new InfoBox();
