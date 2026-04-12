@@ -29,11 +29,11 @@ let ambiente = new THREE.Object3D(); // objeto p juntar os elementos do ambiente
 let plane = createGroundPlaneWired(100, 100, 50, 50, 5, 'darkgreen', 'green'); // plano quadriculado verde
 ambiente.add(plane);
 
-ambiente.add(criaArvoreVerao(-7, 7)); // arvore normal (verao?)
-ambiente.add(criaArvoreMaca(7, 7)); // arvore de maça (primavera?)
+ambiente.add(criaArvoreVerao(0, 0)); // arvore normal (verao?)
+ambiente.add(criaArvoreMaca(14, 0)); // arvore de maça (primavera?)
 ambiente.add(criaArvoreLaranja(7, 0)); // arvore de laranja (primavera?)
 ambiente.add(criaArvoreInverno(-7, 0)); //arvore com neve (inverno)
-ambiente.add(criaArvoreOutono(0, 0)); // arvore outono
+ambiente.add(criaArvoreOutono(-14, 0)); // arvore outono
 scene.add(ambiente);
 
 // Use this to show information onscreen
@@ -72,7 +72,12 @@ controls.add("Use mouse to interact:");
   folhasBase.position.set(0.0, 4.25, 0.0);
   arvore.add(folhasBase);
   
-  arvore.position.set(x, 0.0, z); // escolhe a posicao no plano mas deixa no chão
+  arvore.position.set(x, 0.0, z); // escolhe a posicao no plano mas deixa no "chão"
+
+  const altura = (Math.random() * (1.3 - 0.7) + 0.7); // varia altura entre 0.7x e 1.3x
+  const largura = (Math.random() * (1.1 - 0.8) + 0.8); // varia largura entre 0.8x e 1.1x
+  arvore.scale.set(largura, altura, largura); 
+
   return arvore; // retorna a arvore pronta
 }
 
