@@ -34,11 +34,11 @@ ambiente.add(plane);
 // ambiente.add(criaArvoreLaranja(7, 0)); // arvore de laranja (primavera?)
 // ambiente.add(criaArvoreInverno(-7, 0)); //arvore com neve (inverno)
 // ambiente.add(criaArvoreOutono(-14, 0)); // arvore outono
-ambiente.add(criaArvoreRedonda(0, 0)); // arvore redonda
-ambiente.add(criaArvoreRedonda(9, 0)); // arvore redonda
-ambiente.add(criaArvoreRedonda(18, 0)); // arvore redonda
-ambiente.add(criaArvoreRedonda(-9, 0)); // arvore redonda
-ambiente.add(criaArvoreRedonda(-18, 0)); // arvore redonda
+ambiente.add(criaArvoreRedondaFrutas(0, 0, 'firebrick')); // arvore redonda de maça
+ambiente.add(criaArvoreRedondaFrutas(9, 0, 'chocolate')); // arvore redonda de laranja
+ambiente.add(criaArvoreRedondaFrutas(18, 0, 'firebrick')); // arvore redonda de maça
+ambiente.add(criaArvoreRedondaFrutas(-9, 0, 'chocolate')); // arvore redonda de laranja
+ambiente.add(criaArvoreRedondaFrutas(-18, 0, 'firebrick')); // arvore redonda de maça
 
 scene.add(ambiente);
 
@@ -54,13 +54,13 @@ controls.show();
 
 render();
 
-function criaArvoreRedonda(x, z) // arvore redonda
+function criaArvoreRedonda(x, z, corFolhas = 'forestgreen', corTronco = 'saddlebrown') // arvore redonda
 {
   let arvore = new THREE.Object3D();
 
   const altura = (Math.random() * (7.0 - 5.0) + 5.0); // varia altura entre 5.0 e 7.0
   
-  let materialTronco = setDefaultMaterial('saddlebrown');
+  let materialTronco = setDefaultMaterial(corTronco);
   let troncoGeometry = new THREE.CylinderGeometry(0.9, 0.9, altura, 32);
   let tronco = new THREE.Mesh(troncoGeometry, materialTronco);
   tronco.position.set(0.0, altura / 2, 0.0);
@@ -69,12 +69,39 @@ function criaArvoreRedonda(x, z) // arvore redonda
   for (let i = 0; i < 10; i++) // cria varias folhas redondas com posicoes e tamanhos variados
   {
     let raio = (Math.random() * (2.6 - 1.3) + 1.3); // varia o raio entre 1.3 e 2.6
-    let folha = criaFolhasRedondas(raio, (Math.random() * 2 - 1) * 2, (Math.random() * 2 - 1) * 2 + altura, (Math.random() * 2 - 1) * 2);
+    let folha = criaFolhasRedondas(raio, (Math.random() * 2 - 1) * 2, (Math.random() * 2 - 1) * 2 + altura, (Math.random() * 2 - 1) * 2, corFolhas);
     arvore.add(folha);
   }
 
   arvore.position.set(x, 0.0, z);
 
+  return arvore;
+}
+
+function criaArvoreRedondaFrutas(x, z, corFrutas) // arvore redonda
+{
+  let arvore = new THREE.Object3D();
+
+  const altura = (Math.random() * (7.0 - 5.0) + 5.0); // varia altura entre 5.0 e 7.0
+  
+  let materialTronco = setDefaultMaterial('saddlebrown');
+  let troncoGeometry = new THREE.CylinderGeometry(0.9, 0.9, altura, 32); // tronco da arvore com altura variavel
+  let tronco = new THREE.Mesh(troncoGeometry, materialTronco);
+  tronco.position.set(0.0, altura/2, 0.0); // posiciona no chao
+  arvore.add(tronco);
+
+  for (let i = 0; i < 10; i++) // cria varias folhas redondas com posicoes e tamanhos variados
+  {
+    let raio = (Math.random() * (2.6 - 1.3) + 1.3); // varia o raio entre 1.3 e 2.6
+    let x = (Math.random() * 2 - 1) * 2;            // varia x entre -2 e 2
+    let y = (Math.random() * 2 - 1) * 2 + altura;   // varia y entre -2 e 2 na altura da arvore
+    let z = (Math.random() * 2 - 1) * 2;            // varia z entre -2 e 2
+    let folha = criaFolhasRedondasFrutos(raio, x, y, z, corFrutas);
+    folha.rotateOnAxis(new THREE.Vector3(1, 0, 0), Math.random() * 2 * Math.PI); // rotaciona as folhas aleatoriamente
+    arvore.add(folha);
+  }
+
+  arvore.position.set(x, 0.0, z);
   return arvore;
 }
 
@@ -84,6 +111,16 @@ function criaFolhasRedondas(raio, x, y, z, corFolhas = 'forestgreen')
   let folhaGeometry = new THREE.SphereGeometry(raio, 32, 32);
   let folha = new THREE.Mesh(folhaGeometry, materialFolhas);
   folha.position.set(x, y, z);
+  return folha;
+}
+
+function criaFolhasRedondasFrutos(raio, x, y, z, corFrutos = 'firebrick')
+{
+  let folha = criaFolhasRedondas(raio, x, y, z, 'forestgreen');
+  folha.add(posicionaFrutos((raio/2 + 0.15), -(raio/2 + 0.15), -(raio/2 + 0.15), corFrutos)); // posiciona nas bordas das folhas
+  folha.add(posicionaFrutos((raio/2 + 0.15), (raio/2 + 0.15), (raio/2 + 0.15), corFrutos));
+  folha.add(posicionaFrutos(-(raio/2 + 0.15), (raio/2 + 0.15), -(raio/2 + 0.15), corFrutos));
+  folha.add(posicionaFrutos(-(raio/2 + 0.15), -(raio/2 + 0.15), (raio/2 + 0.15), corFrutos));
   return folha;
 }
 
