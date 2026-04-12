@@ -29,11 +29,17 @@ let ambiente = new THREE.Object3D(); // objeto p juntar os elementos do ambiente
 let plane = createGroundPlaneWired(100, 100, 50, 50, 5, 'darkgreen', 'green'); // plano quadriculado verde
 ambiente.add(plane);
 
-ambiente.add(criaArvoreVerao(0, 0)); // arvore normal (verao?)
-ambiente.add(criaArvoreMaca(14, 0)); // arvore de maça (primavera?)
-ambiente.add(criaArvoreLaranja(7, 0)); // arvore de laranja (primavera?)
-ambiente.add(criaArvoreInverno(-7, 0)); //arvore com neve (inverno)
-ambiente.add(criaArvoreOutono(-14, 0)); // arvore outono
+// ambiente.add(criaArvoreVerao(0, 0)); // arvore normal (verao?)
+// ambiente.add(criaArvoreMaca(14, 0)); // arvore de maça (primavera?)
+// ambiente.add(criaArvoreLaranja(7, 0)); // arvore de laranja (primavera?)
+// ambiente.add(criaArvoreInverno(-7, 0)); //arvore com neve (inverno)
+// ambiente.add(criaArvoreOutono(-14, 0)); // arvore outono
+ambiente.add(criaArvoreRedonda(0, 0)); // arvore redonda
+ambiente.add(criaArvoreRedonda(9, 0)); // arvore redonda
+ambiente.add(criaArvoreRedonda(18, 0)); // arvore redonda
+ambiente.add(criaArvoreRedonda(-9, 0)); // arvore redonda
+ambiente.add(criaArvoreRedonda(-18, 0)); // arvore redonda
+
 scene.add(ambiente);
 
 // Use this to show information onscreen
@@ -41,15 +47,48 @@ let controls = new InfoBox();
 controls.add("Basic Scene");
 controls.addParagraph();
 controls.add("Use mouse to interact:");
-  controls.add("* Left button to rotate");
-  controls.add("* Right button to translate (pan)");
-  controls.add("* Scroll to zoom in/out.");
-  controls.show();
-  
-  render();
+controls.add("* Left button to rotate");
+controls.add("* Right button to translate (pan)");
+controls.add("* Scroll to zoom in/out.");
+controls.show();
 
-  function criaArvoreBase(x, z, corFolhas = 'forestgreen', corTronco = 'saddlebrown') // arvore triangular
+render();
+
+function criaArvoreRedonda(x, z) // arvore redonda
+{
+  let arvore = new THREE.Object3D();
+
+  const altura = (Math.random() * (7.0 - 5.0) + 5.0); // varia altura entre 5.0 e 7.0
+  
+  let materialTronco = setDefaultMaterial('saddlebrown');
+  let troncoGeometry = new THREE.CylinderGeometry(0.9, 0.9, altura, 32);
+  let tronco = new THREE.Mesh(troncoGeometry, materialTronco);
+  tronco.position.set(0.0, altura / 2, 0.0);
+  arvore.add(tronco);
+
+  for (let i = 0; i < 10; i++) // cria varias folhas redondas com posicoes e tamanhos variados
   {
+    let raio = (Math.random() * (2.6 - 1.3) + 1.3); // varia o raio entre 1.3 e 2.6
+    let folha = criaFolhasRedondas(raio, (Math.random() * 2 - 1) * 2, (Math.random() * 2 - 1) * 2 + altura, (Math.random() * 2 - 1) * 2);
+    arvore.add(folha);
+  }
+
+  arvore.position.set(x, 0.0, z);
+
+  return arvore;
+}
+
+function criaFolhasRedondas(raio, x, y, z, corFolhas = 'forestgreen')
+{
+  let materialFolhas = setDefaultMaterial(corFolhas);
+  let folhaGeometry = new THREE.SphereGeometry(raio, 32, 32);
+  let folha = new THREE.Mesh(folhaGeometry, materialFolhas);
+  folha.position.set(x, y, z);
+  return folha;
+}
+
+function criaArvoreBase(x, z, corFolhas = 'forestgreen', corTronco = 'saddlebrown') // arvore triangular
+{
   let arvore = new THREE.Object3D(); // objeto para juntar os elementos da arvore
   
   let materialTronco = setDefaultMaterial(corTronco); // cria tronco
