@@ -29,16 +29,16 @@ let ambiente = new THREE.Object3D(); // objeto p juntar os elementos do ambiente
 let plane = createGroundPlaneWired(100, 100, 50, 50, 5, 'darkgreen', 'green'); // plano quadriculado verde
 ambiente.add(plane);
 
-ambiente.add(criaArvoreVerao(0, 10)); // arvore normal (verao?)
-ambiente.add(criaArvoreMaca(14, 10)); // arvore de maça (primavera?)
-ambiente.add(criaArvoreLaranja(7, 10)); // arvore de laranja (primavera?)
-ambiente.add(criaArvoreInverno(-7, 10)); //arvore com neve (inverno)
-ambiente.add(criaArvoreOutono(-14, 10)); // arvore outono
-ambiente.add(criaArvoreRedonda(0, -10)); // arvore redonda de maça
-ambiente.add(criaArvoreRedonda(9, -10, 'frutos', 'chocolate')); // arvore redonda de laranja
-ambiente.add(criaArvoreRedonda(18, -10, 'frutos', 'firebrick')); // arvore redonda de maça
-ambiente.add(criaArvoreRedonda(-9, -10, 'neve', 'snow', 'saddlebrown')); // arvore redonda de laranja
-ambiente.add(criaArvoreRedonda(-18, -10, 'normal', 'darkgoldenrod', 'saddlebrown')); // arvore redonda de maça
+ambiente.add(criaArvoreTriangularVerao(0, 10)); // arvore normal (verao?)
+ambiente.add(criaArvoreTriangularMaca(14, 10)); // arvore de maça (primavera?)
+ambiente.add(criaArvoreTriangularLaranja(7, 10)); // arvore de laranja (primavera?)
+ambiente.add(criaArvoreTriangularInverno(-7, 10)); //arvore com neve (inverno)
+ambiente.add(criaArvoreTriangularOutono(-14, 10)); // arvore outono
+ambiente.add(criaArvoreRedondaVerao(0, -10)); // arvore redonda de maça
+ambiente.add(criaArvoreRedondaLaranja(9, -10)); // arvore redonda de laranja
+ambiente.add(criaArvoreRedondaMaca(18, -10)); // arvore redonda de maça
+ambiente.add(criaArvoreRedondaNeve(-9, -10)); // arvore redonda com neve
+ambiente.add(criaArvoreRedondaOutono(-18, -10)); // arvore redonda de outono
 
 scene.add(ambiente);
 
@@ -120,7 +120,7 @@ function criaFolhasRedondasNeve(raio, x, y, z)
   return folha;
 }
 
-function criaArvoreBase(x, z, corFolhas = 'forestgreen', corTronco = 'sienna') // arvore triangular
+function criaArvoreTriangular(x, z, corFolhas = 'forestgreen', corTronco = 'sienna') // arvore triangular
 {
   let arvore = new THREE.Object3D(); // objeto para juntar os elementos da arvore
   
@@ -162,9 +162,9 @@ function posicionaFrutos(x, y, z, corFruto) // ajuda a posicionar os frutos na a
   return fruto; // retorna o fruto pronto p ser adicionado
 }
 
-function criaArvoreFrutos(x, z, corFruto) // cria arvore de frutos, escolhendo a cor do fruto
+function criaArvoreTriangularFrutos(x, z, corFruto) // cria arvore de frutos, escolhendo a cor do fruto
 {
-  let arvore = criaArvoreBase(x, z); // cria a arvore base
+  let arvore = criaArvoreTriangular(x, z); // cria a arvore base
   
   arvore.add(posicionaFrutos(0.7, 6, 0.7, corFruto)); // usa a funcao para escolher a posicao dos frutos
   arvore.add(posicionaFrutos(-1, 4.7, 1, corFruto)); // e os adiciona a arvore criada (objeto 3D)
@@ -178,9 +178,9 @@ function criaArvoreFrutos(x, z, corFruto) // cria arvore de frutos, escolhendo a
   return arvore;
 }
 
-function criaArvoreNeve(x, z) // cria arvore com neve
+function criaArvoreTriangularNeve(x, z) // cria arvore com neve
 {
-  let arvore = criaArvoreBase(x, z, 'darkgreen'); // arvore base com verde mais escuro
+  let arvore = criaArvoreTriangular(x, z, 'darkgreen'); // arvore base com verde mais escuro
   let materialNeve = setDefaultMaterial('snow');
 
   let nevePontaGeometry = new THREE.ConeGeometry(0.6, 1, 32); // pontinha da arvore com neve
@@ -203,15 +203,25 @@ function criaArvoreNeve(x, z) // cria arvore com neve
   return arvore;
 }
 
-function criaArvoreOutono(x, z) { return criaArvoreBase(x, z, 'darkgoldenrod', 'saddlebrown'); } // cria arvore com as cores de outono
+function criaArvoreTriangularOutono(x, z) { return criaArvoreTriangular(x, z, 'darkgoldenrod', 'saddlebrown'); } // cria arvore com as cores de outono
 
-function criaArvoreVerao(x, z) { return criaArvoreBase(x, z); } // cria arvore base para o verao
+function criaArvoreTriangularVerao(x, z) { return criaArvoreTriangular(x, z); } // cria arvore base para o verao
 
-function criaArvoreInverno(x, z) { return criaArvoreNeve(x, z); } // cria arvore com neve para o inverno
+function criaArvoreTriangularInverno(x, z) { return criaArvoreTriangularNeve(x, z); } // cria arvore com neve para o inverno
 
-function criaArvoreMaca(x, z) { return criaArvoreFrutos(x, z, 'firebrick'); } // cria arvore de maça
+function criaArvoreTriangularMaca(x, z) { return criaArvoreTriangularFrutos(x, z, 'firebrick'); } // cria arvore de maça
 
-function criaArvoreLaranja(x, z) { return criaArvoreFrutos(x, z, 'chocolate'); } // cria arvore de laranja
+function criaArvoreTriangularLaranja(x, z) { return criaArvoreTriangularFrutos(x, z, 'chocolate'); } // cria arvore de laranja
+
+function criaArvoreRedondaOutono(x, z) { return criaArvoreRedonda(x, z, 'normal', 'darkgoldenrod', 'saddlebrown'); } // cria arvore redonda de outono
+
+function criaArvoreRedondaVerao(x, z) { return criaArvoreRedonda(x, z); } // cria arvore redonda normal (verao)
+
+function criaArvoreRedondaNeve(x, z) { return criaArvoreRedonda(x, z, 'neve', 'snow', 'saddlebrown'); } // cria arvore redonda com neve
+
+function criaArvoreRedondaMaca(x, z) { return criaArvoreRedonda(x, z, 'frutos', 'firebrick'); } // cria arvore redonda de maça
+
+function criaArvoreRedondaLaranja(x, z) { return criaArvoreRedonda(x, z, 'frutos', 'chocolate'); } // cria arvore redonda de laranja
 
 function render()
 {
