@@ -29,16 +29,16 @@ let ambiente = new THREE.Object3D(); // objeto p juntar os elementos do ambiente
 let plane = createGroundPlaneWired(100, 100, 50, 50, 5, 'darkgreen', 'green'); // plano quadriculado verde
 ambiente.add(plane);
 
-// ambiente.add(criaArvoreVerao(0, 0)); // arvore normal (verao?)
-// ambiente.add(criaArvoreMaca(14, 0)); // arvore de maça (primavera?)
-// ambiente.add(criaArvoreLaranja(7, 0)); // arvore de laranja (primavera?)
-// ambiente.add(criaArvoreInverno(-7, 0)); //arvore com neve (inverno)
-// ambiente.add(criaArvoreOutono(-14, 0)); // arvore outono
-ambiente.add(criaArvoreRedondaFrutas(0, 0, 'firebrick')); // arvore redonda de maça
-ambiente.add(criaArvoreRedondaFrutas(9, 0, 'chocolate')); // arvore redonda de laranja
-ambiente.add(criaArvoreRedondaFrutas(18, 0, 'firebrick')); // arvore redonda de maça
-ambiente.add(criaArvoreRedondaFrutas(-9, 0, 'chocolate')); // arvore redonda de laranja
-ambiente.add(criaArvoreRedondaFrutas(-18, 0, 'firebrick')); // arvore redonda de maça
+ambiente.add(criaArvoreVerao(0, 10)); // arvore normal (verao?)
+ambiente.add(criaArvoreMaca(14, 10)); // arvore de maça (primavera?)
+ambiente.add(criaArvoreLaranja(7, 10)); // arvore de laranja (primavera?)
+ambiente.add(criaArvoreInverno(-7, 10)); //arvore com neve (inverno)
+ambiente.add(criaArvoreOutono(-14, 10)); // arvore outono
+ambiente.add(criaArvoreRedonda(0, -10)); // arvore redonda de maça
+ambiente.add(criaArvoreRedonda(9, -10, 'frutos', 'chocolate')); // arvore redonda de laranja
+ambiente.add(criaArvoreRedonda(18, -10, 'frutos', 'firebrick')); // arvore redonda de maça
+ambiente.add(criaArvoreRedonda(-9, -10, 'neve', 'snow', 'saddlebrown')); // arvore redonda de laranja
+ambiente.add(criaArvoreRedonda(-18, -10, 'normal', 'darkgoldenrod', 'saddlebrown')); // arvore redonda de maça
 
 scene.add(ambiente);
 
@@ -54,7 +54,7 @@ controls.show();
 
 render();
 
-function criaArvoreRedonda(x, z, corFolhas = 'forestgreen', corTronco = 'saddlebrown') // arvore redonda
+function criaArvoreRedonda(x, z, tipo = 'normal', corFolhas = 'forestgreen', corTronco = 'sienna') // arvore redonda
 {
   let arvore = new THREE.Object3D();
 
@@ -69,39 +69,24 @@ function criaArvoreRedonda(x, z, corFolhas = 'forestgreen', corTronco = 'saddleb
   for (let i = 0; i < 10; i++) // cria varias folhas redondas com posicoes e tamanhos variados
   {
     let raio = (Math.random() * (2.6 - 1.3) + 1.3); // varia o raio entre 1.3 e 2.6
-    let folha = criaFolhasRedondas(raio, (Math.random() * 2 - 1) * 2, (Math.random() * 2 - 1) * 2 + altura, (Math.random() * 2 - 1) * 2, corFolhas);
-    arvore.add(folha);
-  }
-
-  arvore.position.set(x, 0.0, z);
-
-  return arvore;
-}
-
-function criaArvoreRedondaFrutas(x, z, corFrutas) // arvore redonda
-{
-  let arvore = new THREE.Object3D();
-
-  const altura = (Math.random() * (7.0 - 5.0) + 5.0); // varia altura entre 5.0 e 7.0
-  
-  let materialTronco = setDefaultMaterial('saddlebrown');
-  let troncoGeometry = new THREE.CylinderGeometry(0.9, 0.9, altura, 32); // tronco da arvore com altura variavel
-  let tronco = new THREE.Mesh(troncoGeometry, materialTronco);
-  tronco.position.set(0.0, altura/2, 0.0); // posiciona no chao
-  arvore.add(tronco);
-
-  for (let i = 0; i < 10; i++) // cria varias folhas redondas com posicoes e tamanhos variados
-  {
-    let raio = (Math.random() * (2.6 - 1.3) + 1.3); // varia o raio entre 1.3 e 2.6
     let x = (Math.random() * 2 - 1) * 2;            // varia x entre -2 e 2
     let y = (Math.random() * 2 - 1) * 2 + altura;   // varia y entre -2 e 2 na altura da arvore
     let z = (Math.random() * 2 - 1) * 2;            // varia z entre -2 e 2
-    let folha = criaFolhasRedondasFrutos(raio, x, y, z, corFrutas);
-    folha.rotateOnAxis(new THREE.Vector3(1, 0, 0), Math.random() * 2 * Math.PI); // rotaciona as folhas aleatoriamente
+
+    let folha;
+    if (tipo === 'normal'){
+      folha = criaFolhasRedondas(raio, x, y, z, corFolhas);
+    } else if (tipo === 'frutos') {
+      folha = criaFolhasRedondasFrutos(raio, x, y, z, corFolhas);
+      folha.rotateOnAxis(new THREE.Vector3(1, 0, 0), Math.random() * 2 * Math.PI); // rotaciona as folhas aleatoriamente
+    } else if (tipo === 'neve') {
+      folha = criaFolhasRedondasNeve(raio, x, y, z);
+    }
     arvore.add(folha);
   }
 
   arvore.position.set(x, 0.0, z);
+
   return arvore;
 }
 
@@ -124,7 +109,18 @@ function criaFolhasRedondasFrutos(raio, x, y, z, corFrutos = 'firebrick')
   return folha;
 }
 
-function criaArvoreBase(x, z, corFolhas = 'forestgreen', corTronco = 'saddlebrown') // arvore triangular
+function criaFolhasRedondasNeve(raio, x, y, z)
+{
+  let folha = criaFolhasRedondas(raio, x, y, z, 'darkgreen');
+  let materialNeve = setDefaultMaterial('snow');
+  let neveGeometry = new THREE.SphereGeometry(raio, 32, 32, 0, Math.PI * 2, 0, Math.PI * 0.4); // cria a parte de cima da folha com neve (metade da esfera)
+  let neve = new THREE.Mesh(neveGeometry, materialNeve);
+  neve.position.set(0, 0.1, 0); // posiciona a neve na parte de cima da folha
+  folha.add(neve);
+  return folha;
+}
+
+function criaArvoreBase(x, z, corFolhas = 'forestgreen', corTronco = 'sienna') // arvore triangular
 {
   let arvore = new THREE.Object3D(); // objeto para juntar os elementos da arvore
   
@@ -207,7 +203,7 @@ function criaArvoreNeve(x, z) // cria arvore com neve
   return arvore;
 }
 
-function criaArvoreOutono(x, z) { return criaArvoreBase(x, z, 'darkgoldenrod', 'sienna'); } // cria arvore com as cores de outono
+function criaArvoreOutono(x, z) { return criaArvoreBase(x, z, 'darkgoldenrod', 'saddlebrown'); } // cria arvore com as cores de outono
 
 function criaArvoreVerao(x, z) { return criaArvoreBase(x, z); } // cria arvore base para o verao
 
