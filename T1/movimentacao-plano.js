@@ -10,6 +10,7 @@ import {initRenderer,
 import { Color } from '../build/three.core.js';
 import { criaCenarioVerao, criaCenarioInverno, criaCenarioOutono, criaCenarioPrimavera, criaCenario } from './ambiente.js';
 import { criarAviao } from './aviao.js';
+import GUI from '../libs/util/dat.gui.module.js';
 
 var scene = new THREE.Scene();   // Cria a cena principal
 const clock = new THREE.Clock(); // Cria um relógio para controlar o tempo entre os frames
@@ -60,7 +61,15 @@ function showInformation(){ // Função para mostrar as informações na caixa d
   controls.add("Movimento no plano"); // Adiciona outra linha de texto à caixa de informações
   controls.show(); // 
 }
+
+buildInterface(); // Chama a função para construir a interface do usuário, que pode incluir controles ou opções para interagir com a cena
 render(); // Inicia o loop de renderização para atualizar a cena continuamente
+
+function buildInterface() {
+  var gui = new GUI();
+  gui.add(scene.fog, 'far', 20, 200)
+    .name("Fog Far");
+}
 
 function render() // Função de renderização que é chamada a cada frame para atualizar a cena
 {
