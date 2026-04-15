@@ -1,29 +1,6 @@
 import * as THREE from  'three';
-import { OrbitControls } from '../build/jsm/controls/OrbitControls.js';
-import {initRenderer, 
-        initCamera,
-        initDefaultBasicLight,
-        setDefaultMaterial,
-        onWindowResize} from "../libs/util/util.js";
 
-let scene, renderer, camera, material, light, orbit;
-scene = new THREE.Scene();    
-renderer = initRenderer();    
-material = setDefaultMaterial(); 
-light = initDefaultBasicLight(scene);
-camera = initCamera(new THREE.Vector3(0, 15, 30));
-scene.add(camera); 
-orbit = new OrbitControls( camera, renderer.domElement ); 
-scene.background = new THREE.Color( 'skyblue' ); 
-
-window.addEventListener( 'resize', function(){onWindowResize(camera, renderer)}, false );
-
-let axesHelper = new THREE.AxesHelper( 12 );
-scene.add( axesHelper );
-
-
-
-function criarAviao(){
+export function criarAviao(){
     let aviao = new THREE.Group();
     const matCorpo = new THREE.MeshStandardMaterial({ color: "#f5f5f5", metalness: 0.3, roughness: 0.4 });
     const matDetalhe = new THREE.MeshStandardMaterial({ color: "#1e3a5f", metalness: 0.5, roughness: 0.3 });
@@ -112,17 +89,5 @@ function criarAviao(){
         aviao.add(janelaE);
     }
 
-
-
   return aviao;
-}
-
-scene.add(criarAviao());
-
-
-render();
-function render()
-{
-  requestAnimationFrame(render);
-  renderer.render(scene, camera) 
 }

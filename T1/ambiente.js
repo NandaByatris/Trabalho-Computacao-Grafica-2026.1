@@ -9,64 +9,6 @@ import {initRenderer,
         createGroundPlaneXZ,
         createGroundPlaneWired} from "../libs/util/util.js";
 
-let scene, renderer, camera, material, light, orbit; // Initial variables
-scene = new THREE.Scene();    // Create main scene
-renderer = initRenderer();    // Init a basic renderer
-material = setDefaultMaterial(); // create a basic material
-light = initDefaultBasicLight(scene); // Create a basic light to illuminate the scene
-camera = initCamera(new THREE.Vector3(0, 15, 30)); // Init camera in this position
-scene.add(camera); // Add camera to the scene
-orbit = new OrbitControls( camera, renderer.domElement ); // Enable mouse rotation, pan, zoom etc.
-
-// Listen window size changes
-window.addEventListener( 'resize', function(){onWindowResize(camera, renderer)}, false );
-
-// Show axes (parameter is size of each axis)
-let axesHelper = new THREE.AxesHelper( 12 );
-scene.add( axesHelper );
-
-// let ambiente = new THREE.Object3D(); // objeto p juntar os elementos do ambiente
-// let plane = createGroundPlaneWired(100, 100, 50, 50, 5, 'darkgreen', 'green'); // plano quadriculado verde
-// ambiente.add(plane);
-
-// ambiente.add(criaArvoreTriangularVerao(0, 10)); // arvore normal (verao?)
-// ambiente.add(criaArvoreTriangularMaca(14, 10)); // arvore de maça (primavera?)
-// ambiente.add(criaArvoreTriangularLaranja(7, 10)); // arvore de laranja (primavera?)
-// ambiente.add(criaArvoreTriangularInverno(-7, 10)); //arvore com neve (inverno)
-// ambiente.add(criaArvoreTriangularOutono(-14, 10)); // arvore outono
-// ambiente.add(criaArvoreRedondaVerao(0, -10)); // arvore redonda de maça
-// ambiente.add(criaArvoreRedondaLaranja(9, -10)); // arvore redonda de laranja
-// ambiente.add(criaArvoreRedondaMaca(18, -10)); // arvore redonda de maça
-// ambiente.add(criaArvoreRedondaNeve(-9, -10)); // arvore redonda com neve
-// ambiente.add(criaArvoreRedondaOutono(-18, -10)); // arvore redonda de outono
-
-// scene.add(ambiente);
-
-criaCenarioVerao(-25, -20, 25);
-criaCenarioVerao(0, -20, 25);
-criaCenarioVerao(25, -20, 25);
-criaCenarioPrimavera(-25, -20, 0);
-criaCenarioPrimavera(0, -20, 0);
-criaCenarioPrimavera(25, -20, 0);
-criaCenarioOutono(-25, -20, -25);
-criaCenarioOutono(0, -20, -25);
-criaCenarioOutono(25, -20, -25);
-criaCenarioInverno(-25, -20, -50);
-criaCenarioInverno(0, -20, -50);
-criaCenarioInverno(25, -20, -50);
-
-// Use this to show information onscreen
-let controls = new InfoBox();
-controls.add("Basic Scene");
-controls.addParagraph();
-controls.add("Use mouse to interact:");
-controls.add("* Left button to rotate");
-controls.add("* Right button to translate (pan)");
-controls.add("* Scroll to zoom in/out.");
-controls.show();
-
-render();
-
 function criaArvoreRedonda(x, z, tipo = 'normal', corFolhas = 'forestgreen', corTronco = 'sienna') // arvore redonda
 {
   let arvore = new THREE.Object3D();
@@ -243,7 +185,7 @@ function iniciaPosicoes() {
   return { posicoesX, posicoesZ };
 }
 
-function criaCenarioVerao(x, y, z)
+export function criaCenarioVerao(x, y, z)
 {
   let ambiente = new THREE.Object3D();
   let plane = createGroundPlaneWired(100, 100, 25, 25, 5, 'green', 'darkgreen');
@@ -263,10 +205,11 @@ function criaCenarioVerao(x, y, z)
   }
   
   ambiente.position.set(x, y, z);
-  scene.add(ambiente);
+
+  return ambiente;
 }
 
-function criaCenarioInverno(x, y, z)
+export function criaCenarioInverno(x, y, z)
 {
   let ambiente = new THREE.Object3D();
   let plane = createGroundPlaneWired(100, 100, 25, 25, 5, 'snow', 'lightgray');
@@ -286,10 +229,11 @@ function criaCenarioInverno(x, y, z)
   }
   
   ambiente.position.set(x, y, z);
-  scene.add(ambiente);
+
+  return ambiente;
 }
 
-function criaCenarioOutono(x, y, z)
+export function criaCenarioOutono(x, y, z)
 {
   let ambiente = new THREE.Object3D();
   let plane = createGroundPlaneWired(100, 100, 25, 25, 3, 'olive', 'darkgoldenrod');
@@ -309,10 +253,11 @@ function criaCenarioOutono(x, y, z)
   }
   
   ambiente.position.set(x, y, z);
-  scene.add(ambiente);
+
+  return ambiente;
 }
 
-function criaCenarioPrimavera(x, y, z)
+export function criaCenarioPrimavera(x, y, z)
 {
   let ambiente = new THREE.Object3D();
   let plane = createGroundPlaneWired(100, 100, 25, 25, 3, 'darkgreen', 'forestgreen');
@@ -338,11 +283,6 @@ function criaCenarioPrimavera(x, y, z)
   }
   
   ambiente.position.set(x, y, z);
-  scene.add(ambiente);
-}
 
-function render()
-{
-  requestAnimationFrame(render);
-  renderer.render(scene, camera) // Render scene
+  return ambiente;
 }

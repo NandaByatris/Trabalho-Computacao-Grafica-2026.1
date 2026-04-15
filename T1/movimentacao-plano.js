@@ -7,24 +7,34 @@ import {initRenderer,
         InfoBox,
         createGroundPlaneWired} from "../libs/util/util.js";
 import { Color } from '../build/three.core.js';
+import { criaCenarioVerao, criaCenarioInverno, criaCenarioOutono, criaCenarioPrimavera } from './ambiente.js';
+import { criarAviao } from './aviao.js';
 
 var scene = new THREE.Scene();   // Cria a cena principal
 const clock = new THREE.Clock(); // Cria um relógio para controlar o tempo entre os frames
 initDefaultBasicLight(scene, true);    // Use a iluminação padrão
 
 var renderer = initRenderer();   // Função de visualização em util/utils
-  renderer.setClearColor("pink"); // Define a cor de fundo do renderizador
-var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000); // Cria a câmera
-  camera.position.set(10.0, 15.0, 20.0); // Define a posição inicial da câmera
+  renderer.setClearColor("deepskyblue"); // Define a cor de fundo do renderizador
+let camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000); // Cria a câmera
+  camera.position.set(0.0, 0.0, 0.0); // Define a posição inicial da câmera
   camera.up.set( 0, 0, 0 ); // Define a direção "para cima" da câmera
-
 
 window.addEventListener( 'resize', function(){onWindowResize(camera, renderer)}, false ); // Escuta as mudanças no tamanho da janela para ajustar a câmera e o renderizador
 
+let cameraBox = new THREE.Object3D();
+cameraBox.add(camera); // Adiciona a câmera a um objeto vazio (cameraBox) para facilitar o controle do movimento da câmera
+scene.add(cameraBox); // Adiciona o cameraBox à cena
 
-var groundPlane = createGroundPlaneWired(400, 400, 80, 80, 2, "dimgray"); // Cria um plano de chão com linhas, onde 400 é a largura e altura, 80 é o número de segmentos, 2 é a espessura da linha e "dimgray" é a cor da linha 
-scene.add(groundPlane); // Adiciona o plano de chão à cena
-
+for (let i = 0; i < 4; i++) {
+  for (let j = 0; j < 4; j++) {
+    scene.add(criaCenarioPrimavera(i * 100 - 150, -50, j * -100));
+  }
+}
+const aviao = criarAviao();
+aviao.position.set(0, 0, -30);
+aviao.rotateY(Math.PI/2); // Gira o avião para que ele fique voltado para a direção correta (para frente)
+cameraBox.add(aviao); // Adiciona o avião à cena
 
 var target = new THREE.Vector3(0, 0, 0); // Variável para armazenar a posição alvo para a câmera, que será atualizada com base na posição do mouse
 
@@ -33,7 +43,7 @@ window.addEventListener('mousemove', (event) => { // Executa o movimento do mous
         let y = (event.clientY / window.innerHeight) * 2 - 1; // Normaliza a posição do mouse no eixo Y para o intervalo [-1, 1]
 
         target.x = x * 20; // Atualiza a posição alvo da câmera no eixo X com base na posição do mouse, multiplicando por 20 para ampliar o movimento
-        target.z = Math.min(0, -y * 20); // Atualiza a posição alvo da câmera no eixo Z com base na posição do mouse, multiplicando por -20 para ampliar o movimento e inverter a direção
+        target.y = -y * 15; // Atualiza a posição alvo da câmera no eixo Y  com base na posição do mouse, multiplicando por -20 para ampliar o movimento e inverter a direção
     });
 
 var infoBox = new SecondaryBox(""); // Cria uma caixa de informações para exibir instruções ou detalhes sobre o controle
@@ -50,10 +60,10 @@ function render() // Função de renderização que é chamada a cada frame para
 {
   const delta = clock.getDelta(); // Calcula o tempo decorrido desde o último frame usando o relógio, o que pode ser útil para animações ou movimentos suaves
 
-  camera.position.x += (target.x - camera.position.x) * 0.05; // Atualiza a posição da câmera no eixo X para se aproximar da posição alvo, usando uma interpolação suave multiplicada por 0.05 para controlar a velocidade do movimento
-  camera.position.z += (target.z - camera.position.z) * 0.05; // Atualiza a posição da câmera no eixo Z para se aproximar da posição alvo, usando uma interpolação suave multiplicada por 0.05 para controlar a velocidade do movimento
-  camera.position.y = 15; // Mantém a posição da câmera no eixo Y constante em 15, para que a câmera se mova apenas no plano XZ
-  camera.lookAt(camera.position.x, 0, camera.position.z - 30); // Faz a câmera olhar para um ponto à frente dela, ajustando a posição de destino para que a câmera olhe para um ponto 30 unidades à frente no eixo Z, mantendo a mesma posição no eixo X e Y
+  aviao.position.x += (target.x - aviao.position.x) * 0.03; // Atualiza a posição da câmera no eixo X para se aproximar da posição alvo, usando uma interpolação suave multiplicada por 0.05 para controlar a velocidade do movimento
+  cameraBox.position.z -= 0.5; // Atualiza a posição da câmera no eixo Z para se aproximar da posição alvo, usando uma interpolação suave multiplicada por 0.05 para controlar a velocidade do movimento
+  aviao.position.y += (target.y - aviao.position.y) * 0.03; // Mantém a posição da câmera no eixo Y constante em 15, para que a câmera se mova apenas no plano XZ
+  camera.lookAt(cameraBox.position.x, cameraBox.position.y, cameraBox.position.z - 30); // Faz a câmera olhar para um ponto à frente dela, ajustando a posição de destino para que a câmera olhe para um ponto 30 unidades à frente no eixo Z, mantendo a mesma posição no eixo X e Y
 
   requestAnimationFrame(render); // Solicita que a função de renderização seja chamada novamente no próximo frame, criando um loop de animação contínuo
   renderer.render(scene, camera) // Renderiza a cena usando a câmera, atualizando o que é exibido na tela com base nas mudanças feitas na cena e na posição da câmera
