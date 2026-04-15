@@ -286,3 +286,19 @@ export function criaCenarioPrimavera(x, y, z)
 
   return ambiente;
 }
+
+export function criaCenario(x, y, z, tipo = 'verao') {
+    let ambiente = new THREE.Object3D();
+    for (let i = 0; i < 6; i++) {   
+        if (tipo === 'verao') {
+            ambiente.add(criaCenarioVerao(i * 100 - 250 + x, y, z));
+        } else if (tipo === 'inverno') {
+            ambiente.add(criaCenarioInverno(i * 100 - 250 + x, y, z));
+        } else if (tipo === 'outono') {
+            ambiente.add(criaCenarioOutono(i * 100 - 250 + x, y, z));
+        } else if (tipo === 'primavera') {
+            ambiente.add(criaCenarioPrimavera(i * 100 - 250 + x, y, z));
+        }
+    }
+    return ambiente;
+}

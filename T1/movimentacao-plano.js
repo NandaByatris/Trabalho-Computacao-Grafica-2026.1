@@ -7,7 +7,7 @@ import {initRenderer,
         InfoBox,
         createGroundPlaneWired} from "../libs/util/util.js";
 import { Color } from '../build/three.core.js';
-import { criaCenarioVerao, criaCenarioInverno, criaCenarioOutono, criaCenarioPrimavera } from './ambiente.js';
+import { criaCenarioVerao, criaCenarioInverno, criaCenarioOutono, criaCenarioPrimavera, criaCenario } from './ambiente.js';
 import { criarAviao } from './aviao.js';
 
 var scene = new THREE.Scene();   // Cria a cena principal
@@ -26,11 +26,10 @@ let cameraBox = new THREE.Object3D();
 cameraBox.add(camera); // Adiciona a câmera a um objeto vazio (cameraBox) para facilitar o controle do movimento da câmera
 scene.add(cameraBox); // Adiciona o cameraBox à cena
 
-for (let i = 0; i < 4; i++) {
-  for (let j = 0; j < 4; j++) {
-    scene.add(criaCenarioPrimavera(i * 100 - 150, -50, j * -100));
-  }
+for (let i = 0; i < 6; i++) {
+  scene.add(criaCenario(0, -30, i * -100, 'outono'));
 }
+
 const aviao = criarAviao();
 aviao.position.set(0, 0, -30);
 aviao.rotateY(Math.PI/2); // Gira o avião para que ele fique voltado para a direção correta (para frente)
