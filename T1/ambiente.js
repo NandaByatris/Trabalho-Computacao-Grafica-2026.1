@@ -25,22 +25,35 @@ window.addEventListener( 'resize', function(){onWindowResize(camera, renderer)},
 let axesHelper = new THREE.AxesHelper( 12 );
 scene.add( axesHelper );
 
-let ambiente = new THREE.Object3D(); // objeto p juntar os elementos do ambiente
-let plane = createGroundPlaneWired(100, 100, 50, 50, 5, 'darkgreen', 'green'); // plano quadriculado verde
-ambiente.add(plane);
+// let ambiente = new THREE.Object3D(); // objeto p juntar os elementos do ambiente
+// let plane = createGroundPlaneWired(100, 100, 50, 50, 5, 'darkgreen', 'green'); // plano quadriculado verde
+// ambiente.add(plane);
 
-ambiente.add(criaArvoreTriangularVerao(0, 10)); // arvore normal (verao?)
-ambiente.add(criaArvoreTriangularMaca(14, 10)); // arvore de maça (primavera?)
-ambiente.add(criaArvoreTriangularLaranja(7, 10)); // arvore de laranja (primavera?)
-ambiente.add(criaArvoreTriangularInverno(-7, 10)); //arvore com neve (inverno)
-ambiente.add(criaArvoreTriangularOutono(-14, 10)); // arvore outono
-ambiente.add(criaArvoreRedondaVerao(0, -10)); // arvore redonda de maça
-ambiente.add(criaArvoreRedondaLaranja(9, -10)); // arvore redonda de laranja
-ambiente.add(criaArvoreRedondaMaca(18, -10)); // arvore redonda de maça
-ambiente.add(criaArvoreRedondaNeve(-9, -10)); // arvore redonda com neve
-ambiente.add(criaArvoreRedondaOutono(-18, -10)); // arvore redonda de outono
+// ambiente.add(criaArvoreTriangularVerao(0, 10)); // arvore normal (verao?)
+// ambiente.add(criaArvoreTriangularMaca(14, 10)); // arvore de maça (primavera?)
+// ambiente.add(criaArvoreTriangularLaranja(7, 10)); // arvore de laranja (primavera?)
+// ambiente.add(criaArvoreTriangularInverno(-7, 10)); //arvore com neve (inverno)
+// ambiente.add(criaArvoreTriangularOutono(-14, 10)); // arvore outono
+// ambiente.add(criaArvoreRedondaVerao(0, -10)); // arvore redonda de maça
+// ambiente.add(criaArvoreRedondaLaranja(9, -10)); // arvore redonda de laranja
+// ambiente.add(criaArvoreRedondaMaca(18, -10)); // arvore redonda de maça
+// ambiente.add(criaArvoreRedondaNeve(-9, -10)); // arvore redonda com neve
+// ambiente.add(criaArvoreRedondaOutono(-18, -10)); // arvore redonda de outono
 
-scene.add(ambiente);
+// scene.add(ambiente);
+
+criaCenarioVerao(-25, -20, 25);
+criaCenarioVerao(0, -20, 25);
+criaCenarioVerao(25, -20, 25);
+criaCenarioPrimavera(-25, -20, 0);
+criaCenarioPrimavera(0, -20, 0);
+criaCenarioPrimavera(25, -20, 0);
+criaCenarioOutono(-25, -20, -25);
+criaCenarioOutono(0, -20, -25);
+criaCenarioOutono(25, -20, -25);
+criaCenarioInverno(-25, -20, -50);
+criaCenarioInverno(0, -20, -50);
+criaCenarioInverno(25, -20, -50);
 
 // Use this to show information onscreen
 let controls = new InfoBox();
@@ -146,8 +159,8 @@ function criaArvoreTriangular(x, z, corFolhas = 'forestgreen', corTronco = 'sien
   
   arvore.position.set(x, 0.0, z); // escolhe a posicao no plano mas deixa no "chão"
 
-  const altura = (Math.random() * (1.3 - 0.7) + 0.7); // varia altura entre 0.7x e 1.3x
-  const largura = (Math.random() * (1.1 - 0.8) + 0.8); // varia largura entre 0.8x e 1.1x
+  const altura = (Math.random() * (1.6 - 1.0) + 1.0); // varia altura entre 1.0x e 1.6x
+  const largura = (Math.random() * (1.3 - 1.0) + 1.0); // varia largura entre 1.0x e 1.3x
   arvore.scale.set(largura, altura, largura); 
 
   return arvore; // retorna a arvore pronta
@@ -217,11 +230,116 @@ function criaArvoreRedondaOutono(x, z) { return criaArvoreRedonda(x, z, 'normal'
 
 function criaArvoreRedondaVerao(x, z) { return criaArvoreRedonda(x, z); } // cria arvore redonda normal (verao)
 
-function criaArvoreRedondaNeve(x, z) { return criaArvoreRedonda(x, z, 'neve', 'snow', 'saddlebrown'); } // cria arvore redonda com neve
+function criaArvoreRedondaInverno(x, z) { return criaArvoreRedonda(x, z, 'neve', 'snow', 'saddlebrown'); } // cria arvore redonda com neve
 
 function criaArvoreRedondaMaca(x, z) { return criaArvoreRedonda(x, z, 'frutos', 'firebrick'); } // cria arvore redonda de maça
 
 function criaArvoreRedondaLaranja(x, z) { return criaArvoreRedonda(x, z, 'frutos', 'chocolate'); } // cria arvore redonda de laranja
+
+function iniciaPosicoes() {    
+  const posicoesX = [-45, -20, 0, 30, -35, 0, 20, 45, -15, 10, 35, -45, 30, -25, -10, 5, -20, -35, 20, 45];
+  const posicoesZ = [-40, -30, -45, -35, -10, -20, -15, -20, -5, 5, 0, 10, 20, 10, 20, 30, 45, 30, 45, 40];
+
+  return { posicoesX, posicoesZ };
+}
+
+function criaCenarioVerao(x, y, z)
+{
+  let ambiente = new THREE.Object3D();
+  let plane = createGroundPlaneWired(100, 100, 25, 25, 5, 'green', 'darkgreen');
+  ambiente.add(plane);
+
+  const { posicoesX, posicoesZ } = iniciaPosicoes();
+  
+  for (let i = 0; i < posicoesX.length; i++)
+  {
+    if (i % 2 === 0) {
+      let arvore = criaArvoreTriangularVerao(posicoesX[i], posicoesZ[i]);
+      ambiente.add(arvore);
+    } else {
+       let arvore = criaArvoreRedondaVerao(posicoesX[i], posicoesZ[i]);
+       ambiente.add(arvore);
+    }
+  }
+  
+  ambiente.position.set(x, y, z);
+  scene.add(ambiente);
+}
+
+function criaCenarioInverno(x, y, z)
+{
+  let ambiente = new THREE.Object3D();
+  let plane = createGroundPlaneWired(100, 100, 25, 25, 5, 'snow', 'lightgray');
+  ambiente.add(plane);
+  
+  const { posicoesX, posicoesZ } = iniciaPosicoes();
+  
+  for (let i = 0; i < posicoesX.length; i++)
+  {
+    if (i % 2 === 0) {
+      let arvore = criaArvoreTriangularInverno(posicoesX[i], posicoesZ[i]);
+      ambiente.add(arvore);
+    } else {
+       let arvore = criaArvoreRedondaInverno(posicoesX[i], posicoesZ[i]);
+       ambiente.add(arvore);
+    }
+  }
+  
+  ambiente.position.set(x, y, z);
+  scene.add(ambiente);
+}
+
+function criaCenarioOutono(x, y, z)
+{
+  let ambiente = new THREE.Object3D();
+  let plane = createGroundPlaneWired(100, 100, 25, 25, 3, 'olive', 'darkgoldenrod');
+  ambiente.add(plane);
+
+  const { posicoesX, posicoesZ } = iniciaPosicoes();
+  
+  for (let i = 0; i < posicoesX.length; i++)
+  {
+    if (i % 2 === 0) {
+      let arvore = criaArvoreTriangularOutono(posicoesX[i], posicoesZ[i]);
+      ambiente.add(arvore);
+    } else {
+       let arvore = criaArvoreRedondaOutono(posicoesX[i], posicoesZ[i]);
+       ambiente.add(arvore);
+    }
+  }
+  
+  ambiente.position.set(x, y, z);
+  scene.add(ambiente);
+}
+
+function criaCenarioPrimavera(x, y, z)
+{
+  let ambiente = new THREE.Object3D();
+  let plane = createGroundPlaneWired(100, 100, 25, 25, 3, 'darkgreen', 'forestgreen');
+  ambiente.add(plane);
+
+  const { posicoesX, posicoesZ } = iniciaPosicoes();
+
+  for (let i = 0; i < posicoesX.length; i++)
+  {
+    if (i % 4 === 0) {
+      let arvore = criaArvoreTriangularMaca(posicoesX[i], posicoesZ[i]);
+      ambiente.add(arvore);
+    } else if (i % 4 === 1) {
+       let arvore = criaArvoreRedondaLaranja(posicoesX[i], posicoesZ[i]);
+       ambiente.add(arvore);
+    } else if (i % 4 === 2) {
+      let arvore = criaArvoreTriangularLaranja(posicoesX[i], posicoesZ[i]);
+      ambiente.add(arvore);
+    } else {
+      let arvore = criaArvoreRedondaMaca(posicoesX[i], posicoesZ[i]);
+      ambiente.add(arvore);
+    }
+  }
+  
+  ambiente.position.set(x, y, z);
+  scene.add(ambiente);
+}
 
 function render()
 {
