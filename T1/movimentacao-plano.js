@@ -32,13 +32,16 @@ let cameraBox = new THREE.Object3D();
 cameraBox.add(camera); // Adiciona a câmera a um objeto vazio (cameraBox) para facilitar o controle do movimento da câmera
 scene.add(cameraBox); // Adiciona o cameraBox à cena
 
+let cenarios = []; // Cria um array para armazenar os cenários, embora neste código específico ele não seja utilizado posteriormente
 for (let i = 0; i < 3; i++) {
-  scene.add(criaCenario(0, -30, i * -100, 'primavera')); // Adiciona os cenários à cena, posicionando-os em intervalos regulares ao longo do eixo Z
+  let c = criaCenario(0, -30, i * -100, 'primavera'); // Cria um cenário usando a função criaCenario, posicionando-o em diferentes locais ao longo do eixo Z para criar uma sensação de profundidade e variedade na cena. O tipo de cenário é definido como 'primavera', mas poderia ser alterado para outros tipos, como 'verão', 'outono' ou 'inverno', dependendo da implementação da função criaCenario.
+  cenarios.push(c); // Adiciona o cenário criado ao array de cenários, embora neste código específico o array não seja utilizado posteriormente. Isso pode ser útil para futuras manipulações ou para manter uma referência aos cenários criados.
+  scene.add(c); // Adiciona o cenário à cena para que ele seja renderizado e visível na visualização final. Cada cenário é posicionado em um local diferente ao longo do eixo Z, criando uma sensação de profundidade e variedade na cena, e o tipo de cenário é definido como 'primavera', mas poderia ser alterado para outros tipos, como 'verão', 'outono' ou 'inverno', dependendo da implementação da função criaCenario.
 }
 
 const aviao = criarAviao();
 aviao.position.set(0, 0, -30);
-aviao.rotateY(Math.PI/2); // Gira o avião para que ele fique voltado para a direção correta (para frente)
+aviao.rotateY(Math.PI/2); // Gira o avião para que ele ltado para a direção correta (para frente)
 cameraBox.add(aviao); // Adiciona o avião à cena
 
 scene.fog = new THREE.Fog(new Color("lightblue"), 0.1, 200); // Adiciona neblina à cena para criar um efeito de profundidade, usando a mesma cor do fundo para que os objetos desapareçam gradualmente à medida que se afastam da câmera
@@ -75,6 +78,16 @@ function render() // Função de renderização que é chamada a cada frame para
 {
   stats.update();
   const delta = clock.getDelta(); // Calcula o tempo decorrido desde o último frame usando o relógio, o que pode ser útil para animações ou movimentos suaves
+
+  let limite = 50; // Define um limite para o movimento da câmera, para evitar que ela se mova muito longe do centro da cena  
+  let tamanho = 100; // Define o tamanho do plano de movimento da câmera, que pode ser usado para calcular os limites do movimento com base na posição do mouse
+
+  cenarios.forEach((c)=>{
+    if (c.position.z > cameraBox.position.z + limite) { // Verifica se o cenário está dentro do limite de movimento da câmera, comparando a posição do cenário com a posição da câmera e o limite definido
+      let menorZ = Math.min(...cenarios.map(obj => obj.position.z)); // Encontra a menor posição Z entre os cenários para determinar onde reposicionar o cenário que saiu do limite}
+      c.position.z = menorZ - tamanho; // Reposiciona o cenário para a frente da cena, usando o menor Z encontrado e o tamanho do plano de movimento para garantir que ele apareça à frente dos outros cenários
+      }
+    });
 
   aviao.position.x += (target.x - aviao.position.x) * 0.03; // Atualiza a posição da câmera no eixo X para se aproximar da posição alvo, usando uma interpolação suave multiplicada por 0.05 para controlar a velocidade do movimento
   cameraBox.position.z -= 0.5; // Atualiza a posição da câmera no eixo Z para se aproximar da posição alvo, usando uma interpolação suave multiplicada por 0.05 para controlar a velocidade do movimento
