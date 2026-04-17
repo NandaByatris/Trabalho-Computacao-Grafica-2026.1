@@ -33,7 +33,6 @@ function criaArvoreRedonda(x, z, tipo = 'normal', corFolhas = 'forestgreen', cor
       folha = criaFolhasRedondas(raio, x, y, z, corFolhas);
     } else if (tipo === 'frutos') {
       folha = criaFolhasRedondasFrutos(raio, x, y, z, corFolhas);
-      folha.rotateOnAxis(new THREE.Vector3(1, 0, 0), Math.random() * 2 * Math.PI); // rotaciona as folhas aleatoriamente
     } else if (tipo === 'neve') {
       folha = criaFolhasRedondasNeve(raio, x, y, z);
     }
@@ -57,7 +56,7 @@ function criaFolhasRedondas(raio, x, y, z, corFolhas = 'forestgreen')
 function criaFolhasRedondasFrutos(raio, x, y, z, corFrutos = 'firebrick')
 {
   let folha = criaFolhasRedondas(raio, x, y, z, 'forestgreen');
-  folha.add(posicionaFrutos((raio/2 + 0.15), -(raio/2 + 0.15), -(raio/2 + 0.15), corFrutos)); // posiciona nas bordas das folhas
+  // folha.add(posicionaFrutos(-(raio/2 + 0.15), -(raio/2 + 0.15), (raio/2 + 0.15), corFrutos)); // posiciona nas bordas das folhas
   folha.add(posicionaFrutos((raio/2 + 0.15), (raio/2 + 0.15), (raio/2 + 0.15), corFrutos));
   
   return folha;
@@ -123,7 +122,6 @@ function criaArvoreTriangularFrutos(x, z, corFruto) // cria arvore de frutos, es
   arvore.add(posicionaFrutos(0.7, 6, 0.7, corFruto)); // usa a funcao para escolher a posicao dos frutos
   arvore.add(posicionaFrutos(-1, 4.7, 1, corFruto)); // e os adiciona a arvore criada (objeto 3D)
   arvore.add(posicionaFrutos(1.25, 3.2, 1.25, corFruto));
-  arvore.add(posicionaFrutos(-1.6, 2.4, 1.6, corFruto));
   
   return arvore;
 }
