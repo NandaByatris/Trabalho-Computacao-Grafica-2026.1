@@ -71,7 +71,7 @@ window.addEventListener('mousemove', (event) => { // Executa o movimento do mous
         let y = (event.clientY / window.innerHeight) * 2 - 1; // Normaliza a posição do mouse no eixo Y para o intervalo [-1, 1]
 
         target.x = x * 20; // Atualiza a posição alvo da câmera no eixo X com base na posição do mouse, multiplicando por 20 para ampliar o movimento
-        target.y = -y * 15; // Atualiza a posição alvo da câmera no eixo Y  com base na posição do mouse, multiplicando por -20 para ampliar o movimento e inverter a direção
+        target.y = -y * 10; // Atualiza a posição alvo da câmera no eixo Y  com base na posição do mouse, multiplicando por -20 para ampliar o movimento e inverter a direção
     });
 
 var infoBox = new SecondaryBox(""); // Cria uma caixa de informações para exibir instruções ou detalhes sobre o controle
