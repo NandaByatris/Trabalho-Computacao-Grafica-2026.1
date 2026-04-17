@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { FlyControls } from '../build/jsm/controls/FlyControls.js';
+//import { FlyControls } from '../build/jsm/controls/FlyControls.js';
 import Stats from '../build/jsm/libs/stats.module.js';
 import {initRenderer, 
         SecondaryBox,
@@ -7,7 +7,7 @@ import {initRenderer,
         onWindowResize, 
         InfoBox,
         createGroundPlaneWired} from "../libs/util/util.js";
-import { Color } from '../build/three.core.js';
+//import { Color } from '../build/three.core.js';
 import { criaCenarioVerao, criaCenarioInverno, criaCenarioOutono, criaCenarioPrimavera, criaCenario } from './ambiente.js';
 import { criarAviao } from './aviao.js';
 import GUI from '../libs/util/dat.gui.module.js';
@@ -16,15 +16,25 @@ var scene = new THREE.Scene();   // Cria a cena principal
 const clock = new THREE.Clock(); // Cria um relógio para controlar o tempo entre os frames
 initDefaultBasicLight(scene, true);    // Use a iluminação padrão
 
-const container = document.getElementById( 'container' );
 const stats = new Stats();
+
+const container = document.getElementById( 'container' );
+
+if (container) {
+  container.appendChild(stats.dom);
+} else{
+  console.warn("Container não encontrado!");
+}
+
+/*
 container.appendChild( stats.dom );
+*/
 
 var renderer = initRenderer();   // Função de visualização em util/utils
-  renderer.setClearColor("lightblue"); // Define a cor de fundo do renderizador
+  renderer.setClearColor("pink"); // Define a cor de fundo do renderizador
 let camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000); // Cria a câmera
   camera.position.set(0.0, 0.0, 0.0); // Define a posição inicial da câmera
-  camera.up.set( 0, 0, 0 ); // Define a direção "para cima" da câmera
+  camera.up.set( 0, 1, 0 ); // Define a direção "para cima" da câmera
 
 window.addEventListener( 'resize', function(){onWindowResize(camera, renderer)}, false ); // Escuta as mudanças no tamanho da janela para ajustar a câmera e o renderizador
 
@@ -52,7 +62,7 @@ aviao.position.set(0, 0, -30);
 aviao.rotateY(Math.PI/2); // Gira o avião para que ele ltado para a direção correta (para frente)
 cameraBox.add(aviaoContainer); // Adiciona o avião à cena
 
-scene.fog = new THREE.Fog(new Color("lightblue"), 0.1, 200); // Adiciona neblina à cena para criar um efeito de profundidade, usando a mesma cor do fundo para que os objetos desapareçam gradualmente à medida que se afastam da câmera
+scene.fog = new THREE.Fog(new THREE.Color("pink"), 0.1, 200); // Adiciona neblina à cena para criar um efeito de profundidade, usando a mesma cor do fundo para que os objetos desapareçam gradualmente à medida que se afastam da câmera
 
 var target = new THREE.Vector3(0, 0, 0); // Variável para armazenar a posição alvo para a câmera, que será atualizada com base na posição do mouse
 
@@ -84,7 +94,7 @@ function buildInterface() {
 
 function render() // Função de renderização que é chamada a cada frame para atualizar a cena
 {
-  stats.update();
+  //stats.update();
   const delta = clock.getDelta(); // Calcula o tempo decorrido desde o último frame usando o relógio, o que pode ser útil para animações ou movimentos suaves
 
   let limite = 50; // Define um limite para o movimento da câmera, para evitar que ela se mova muito longe do centro da cena  
@@ -102,7 +112,7 @@ function render() // Função de renderização que é chamada a cada frame para
   cenarios.forEach((c)=>{
     if (c.position.z > cameraBox.position.z + limite) { // Verifica se o cenário está dentro do limite de movimento da câmera, comparando a posição do cenário com a posição da câmera e o limite definido
       // let menorZ = Math.min(...cenarios.map(obj => obj.position.z)); // Encontra a menor posição Z entre os cenários para determinar onde reposicionar o cenário que saiu do limite}
-      c.position.z -= tamanho * 3; // Reposiciona o cenário para a frente da cena, usando o menor Z encontrado e o tamanho do plano de movimento para garantir que ele apareça à frente dos outros cenários
+      c.position.z -= tamanho * cenarios.length; // Reposiciona o cenário para a frente da cena, usando o menor Z encontrado e o tamanho do plano de movimento para garantir que ele apareça à frente dos outros cenários
       }
     });
 
@@ -115,5 +125,5 @@ function render() // Função de renderização que é chamada a cada frame para
   camera.lookAt(cameraBox.position.x, cameraBox.position.y, cameraBox.position.z - 30); // Faz a câmera olhar para um ponto à frente dela, ajustando a posição de destino para que a câmera olhe para um ponto 30 unidades à frente no eixo Z, mantendo a mesma posição no eixo X e Y
 
   requestAnimationFrame(render); // Solicita que a função de renderização seja chamada novamente no próximo frame, criando um loop de animação contínuo
-  renderer.render(scene, camera) // Renderiza a cena usando a câmera, atualizando o que é exibido na tela com base nas mudanças feitas na cena e na posição da câmera
+  renderer.render(scene, camera); // Renderiza a cena usando a câmera, atualizando o que é exibido na tela com base nas mudanças feitas na cena e na posição da câmera
 }
