@@ -59,7 +59,7 @@ function criaFolhasRedondasFrutos(raio, x, y, z, corFrutos = 'firebrick')
   let folha = criaFolhasRedondas(raio, x, y, z, 'forestgreen');
   folha.add(posicionaFrutos((raio/2 + 0.15), -(raio/2 + 0.15), -(raio/2 + 0.15), corFrutos)); // posiciona nas bordas das folhas
   folha.add(posicionaFrutos((raio/2 + 0.15), (raio/2 + 0.15), (raio/2 + 0.15), corFrutos));
-  folha.add(posicionaFrutos(-(raio/2 + 0.15), -(raio/2 + 0.15), (raio/2 + 0.15), corFrutos));
+  
   return folha;
 }
 
