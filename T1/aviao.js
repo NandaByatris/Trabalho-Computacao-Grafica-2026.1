@@ -44,11 +44,11 @@ export function criarAviao(){
     
     //luzes nas asas do aviao. 0.2 é o raio, 32 é o número de segmentos. deixei uma vermelha e uma verde, 
     // e não criei um material separado só pra elas porque achei que não valia a pena, já que são só duas esferas pequenas e nao vamos usar esse material em outros lugares.
-    const luzEsquerda = new THREE.Mesh(new THREE.SphereGeometry(0.15), new THREE.MeshBasicMaterial({ color: "red" }));
+    const luzEsquerda = new THREE.Mesh(new THREE.SphereGeometry(0.15,5,5), new THREE.MeshBasicMaterial({ color: "red" }));
     luzEsquerda.position.set(0,-0.2,-7.5);
     aviao.add(luzEsquerda);
 
-    const luzDireita = new THREE.Mesh(new THREE.SphereGeometry(0.15), new THREE.MeshBasicMaterial({ color: "green" }));
+    const luzDireita = new THREE.Mesh(new THREE.SphereGeometry(0.15,5,5), new THREE.MeshBasicMaterial({ color: "green" }));
     luzDireita.position.set(0,-0.2,7.5);
     aviao.add(luzDireita);
 
