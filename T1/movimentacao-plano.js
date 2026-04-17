@@ -88,7 +88,7 @@ render(); // Inicia o loop de renderização para atualizar a cena continuamente
 
 function buildInterface() {
   var gui = new GUI();
-  gui.add(scene.fog, 'far', 20, 200)
+  gui.add(scene.fog, 'far', 60, 200)
     .name("Fog Far");
 }
 
