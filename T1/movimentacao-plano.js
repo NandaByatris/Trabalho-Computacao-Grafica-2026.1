@@ -40,9 +40,17 @@ for (let i = 0; i < 3; i++) {
 }
 
 const aviao = criarAviao();
+const aviaoContainer = new THREE.Object3D(); // Cria um objeto vazio (aviaoContainer) para conter o avião, permitindo que o avião seja controlado como um grupo, facilitando a aplicação de transformações como movimento e rotação ao avião como um todo, sem afetar diretamente a posição ou rotação individual do modelo do avião.
+aviaoContainer.add(aviao); // Adiciona o avião a um objeto vazio (aviaoContainer) para facilitar o controle do movimento do avião
+
+const anguloMaxRotacao = 0.6; // Define o ângulo máximo de rotação do avião em radianos, limitando a inclinação do avião para evitar que ele gire excessivamente quando a posição alvo da câmera estiver muito distante da posição atual do avião. O valor de 0.6 radianos é +- 34/35 graus.
+const limiarParadaRotacao= 1; // Define o limiar de parada para a rotação do avião, que é a distância mínima entre a posição alvo da câmera e a posição atual do avião no eixo X para que o avião comece a girar. Se a diferença no eixo X for menor que esse limiar, o avião permanecerá nivelado, evitando que ele gire desnecessariamente quando a posição alvo da câmera estiver muito próxima da posição atual do avião.  
+const velocidadeInclinacao = 0.05; // Define a velocidade de inclinação do avião,  para controlar a intensidade do efeito de inclinação do avião com base na posição do mouse. Um valor mais alto resultará em uma inclinação mais rápida e intensa, enquanto um valor mais baixo resultará em uma inclinação mais suave e lenta.
+
+
 aviao.position.set(0, 0, -30);
 aviao.rotateY(Math.PI/2); // Gira o avião para que ele ltado para a direção correta (para frente)
-cameraBox.add(aviao); // Adiciona o avião à cena
+cameraBox.add(aviaoContainer); // Adiciona o avião à cena
 
 scene.fog = new THREE.Fog(new Color("lightblue"), 0.1, 200); // Adiciona neblina à cena para criar um efeito de profundidade, usando a mesma cor do fundo para que os objetos desapareçam gradualmente à medida que se afastam da câmera
 
@@ -82,6 +90,15 @@ function render() // Função de renderização que é chamada a cada frame para
   let limite = 50; // Define um limite para o movimento da câmera, para evitar que ela se mova muito longe do centro da cena  
   let tamanho = 100; // Define o tamanho do plano de movimento da câmera, que pode ser usado para calcular os limites do movimento com base na posição do mouse
 
+  let diferencaX = target.x - aviaoContainer.position.x; // Calcula a diferença entre a posição alvo da câmera no eixo X e a posição atual do avião no eixo X, o que pode ser usado para determinar a direção e a intensidade do movimento do avião
+  let anguloDesejado = 0; // Inicializa a variável para armazenar o ângulo desejado de rotação do avião, que será calculado com base na diferença entre a posição alvo da câmera e a posição atual do avião
+
+  if(Math.abs(diferencaX) > limiarParadaRotacao){ // Verifica se a diferença no eixo X é maior que o limiar de parada para rotação, o que pode ser usado para evitar que o avião gire desnecessariamente quando a posição alvo da câmera estiver muito próxima da posição atual do avião
+    anguloDesejado = (diferencaX > 0) ? -anguloMaxRotacao : anguloMaxRotacao; // Define o ângulo desejado de rotação do avião com base na direção da diferença no eixo X, usando o ângulo máximo de rotação para limitar a inclinação do avião
+  } else {
+    anguloDesejado = 0; // Se a diferença no eixo X for menor que o limiar de parada, define o ângulo desejado como 0 para que o avião fique nivelado
+  }
+
   cenarios.forEach((c)=>{
     if (c.position.z > cameraBox.position.z + limite) { // Verifica se o cenário está dentro do limite de movimento da câmera, comparando a posição do cenário com a posição da câmera e o limite definido
       let menorZ = Math.min(...cenarios.map(obj => obj.position.z)); // Encontra a menor posição Z entre os cenários para determinar onde reposicionar o cenário que saiu do limite}
@@ -89,9 +106,12 @@ function render() // Função de renderização que é chamada a cada frame para
       }
     });
 
-  aviao.position.x += (target.x - aviao.position.x) * 0.03; // Atualiza a posição da câmera no eixo X para se aproximar da posição alvo, usando uma interpolação suave multiplicada por 0.05 para controlar a velocidade do movimento
+  aviaoContainer.position.x += (target.x - aviaoContainer.position.x) * 0.05; // Atualiza a posição da câmera no eixo X para se aproximar da posição alvo, usando uma interpolação suave multiplicada por 0.05 para controlar a velocidade do movimento
   cameraBox.position.z -= 0.5; // Atualiza a posição da câmera no eixo Z para se aproximar da posição alvo, usando uma interpolação suave multiplicada por 0.05 para controlar a velocidade do movimento
-  aviao.position.y += (target.y - aviao.position.y) * 0.03; // Mantém a posição da câmera no eixo Y constante em 15, para que a câmera se mova apenas no plano XZ
+  aviaoContainer.position.y += (target.y - aviaoContainer.position.y) * 0.05; // Mantém a posição da câmera no eixo Y constante em 15, para que a câmera se mova apenas no plano XZ
+  
+  aviaoContainer.rotation.z += (anguloDesejado - aviaoContainer.rotation.z) * velocidadeInclinacao;  // Atualiza a rotação do avião no eixo Z para criar um efeito de inclinação com base na posição do mouse, multiplicando pela velocidade de inclinação para controlar a intensidade do efeito
+  
   camera.lookAt(cameraBox.position.x, cameraBox.position.y, cameraBox.position.z - 30); // Faz a câmera olhar para um ponto à frente dela, ajustando a posição de destino para que a câmera olhe para um ponto 30 unidades à frente no eixo Z, mantendo a mesma posição no eixo X e Y
 
   requestAnimationFrame(render); // Solicita que a função de renderização seja chamada novamente no próximo frame, criando um loop de animação contínuo
