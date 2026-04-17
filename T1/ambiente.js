@@ -59,7 +59,6 @@ function criaFolhasRedondasFrutos(raio, x, y, z, corFrutos = 'firebrick')
   let folha = criaFolhasRedondas(raio, x, y, z, 'forestgreen');
   folha.add(posicionaFrutos((raio/2 + 0.15), -(raio/2 + 0.15), -(raio/2 + 0.15), corFrutos)); // posiciona nas bordas das folhas
   folha.add(posicionaFrutos((raio/2 + 0.15), (raio/2 + 0.15), (raio/2 + 0.15), corFrutos));
-  folha.add(posicionaFrutos(-(raio/2 + 0.15), (raio/2 + 0.15), -(raio/2 + 0.15), corFrutos));
   folha.add(posicionaFrutos(-(raio/2 + 0.15), -(raio/2 + 0.15), (raio/2 + 0.15), corFrutos));
   return folha;
 }
@@ -124,11 +123,7 @@ function criaArvoreTriangularFrutos(x, z, corFruto) // cria arvore de frutos, es
   arvore.add(posicionaFrutos(0.7, 6, 0.7, corFruto)); // usa a funcao para escolher a posicao dos frutos
   arvore.add(posicionaFrutos(-1, 4.7, 1, corFruto)); // e os adiciona a arvore criada (objeto 3D)
   arvore.add(posicionaFrutos(1.25, 3.2, 1.25, corFruto));
-  arvore.add(posicionaFrutos(-1.25, 4.2, -1.25, corFruto));
-  arvore.add(posicionaFrutos(0.85, 5.7, -0.85, corFruto));
-  arvore.add(posicionaFrutos(1.6, 2.4, -1.6, corFruto));
   arvore.add(posicionaFrutos(-1.6, 2.4, 1.6, corFruto));
-  arvore.add(posicionaFrutos(-0.5, 6.5, -0.5, corFruto));
   
   return arvore;
 }
