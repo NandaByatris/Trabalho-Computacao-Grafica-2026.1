@@ -9,11 +9,11 @@ export function criarAviao(){
     
     
     // corpo do avião(a parte mais longa). 7 é o comprimento, 1.3 é a largura e a altura, e 32 é o número de segmentos.
-    let corpoAviao = new THREE.Mesh(new THREE.CylinderGeometry(1.3,1.3,7,32), matCorpo);
+    let corpoAviao = new THREE.Mesh(new THREE.CylinderGeometry(1.3,1.3,7,15), matCorpo);
     corpoAviao.rotation.z = Math.PI/2;
     aviao.add(corpoAviao);
 
-    let narizAviao = new THREE.Mesh(new THREE.SphereGeometry(1.3, 32, 32), matCorpo);
+    let narizAviao = new THREE.Mesh(new THREE.SphereGeometry(1.3, 10, 10), matCorpo);
     narizAviao.position.x = 3.5;
     narizAviao.scale.set(1,1,1.8);
     narizAviao.rotation.x = Math.PI/2;
@@ -23,7 +23,7 @@ export function criarAviao(){
 
 
     //asas do aviao. 3 é o raio, 32 é o número de segmentos.
-    const asa = new THREE.Mesh(new THREE.SphereGeometry(3,32,32), matDetalhe);
+    const asa = new THREE.Mesh(new THREE.SphereGeometry(3,20,20), matDetalhe);
     asa.scale.set(2.5,0.1,0.5);
     asa.position.set(0,-0.2,0);
     asa.rotation.y = Math.PI/2;
@@ -31,12 +31,12 @@ export function criarAviao(){
 
 
     //motores do aviao. 0.4 é o raio, 2 é a altura, 32 é o número de segmentos. so muda o lado de cada um.
-    const motorEsquerdo = new THREE.Mesh(new THREE.CylinderGeometry(0.4,0.4,2,32), matMotor);
+    const motorEsquerdo = new THREE.Mesh(new THREE.CylinderGeometry(0.4,0.4,2,10), matMotor);
     motorEsquerdo.position.set(0,-0.8,-4);
     motorEsquerdo.rotation.z = Math.PI/2;
     aviao.add(motorEsquerdo);
 
-    const motorDireito = new THREE.Mesh(new THREE.CylinderGeometry(0.4,0.4,2,32), matMotor);
+    const motorDireito = new THREE.Mesh(new THREE.CylinderGeometry(0.4,0.4,2,10), matMotor);
     motorDireito.position.set(0,-0.8,4);
     motorDireito.rotation.z = Math.PI/2;
     aviao.add(motorDireito);
@@ -61,20 +61,20 @@ export function criarAviao(){
     cauda.rotation.y = Math.PI/2;
     aviao.add(cauda);
 
-    const caudaVertical = new THREE.Mesh(new THREE.SphereGeometry(0.9,32,32),matDetalhe);
+    const caudaVertical = new THREE.Mesh(new THREE.SphereGeometry(0.9,20,20),matDetalhe);
     caudaVertical.scale.set(0.2,2,0.8);
     caudaVertical.rotation.y = Math.PI/2;
     caudaVertical.position.set(-6.5,1.2,0);
     aviao.add(caudaVertical);
 
-    const caudaHorizontal = new THREE.Mesh(new THREE.SphereGeometry(1,32,32),matDetalhe);
+    const caudaHorizontal = new THREE.Mesh(new THREE.SphereGeometry(1,20,20),matDetalhe);
     caudaHorizontal.position.set(-6.5,1.05,0);
     caudaHorizontal.scale.set(0.8,0.2,2.5);
     aviao.add(caudaHorizontal);
 
 
 
-    const geoJanela = new THREE.SphereGeometry(0.2, 32, 32);
+    const geoJanela = new THREE.SphereGeometry(0.2, 10, 10);
 
     for(let i = 0; i < 10; i++) {
         let posX = -2.5 + (i * 0.6);  
