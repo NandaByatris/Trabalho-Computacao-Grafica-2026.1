@@ -16,12 +16,12 @@ function criaArvoreRedonda(x, z, tipo = 'normal', corFolhas = 'forestgreen', cor
   const altura = (Math.random() * (7.0 - 5.0) + 5.0); // varia altura entre 5.0 e 7.0
   
   let materialTronco = setDefaultMaterial(corTronco);
-  let troncoGeometry = new THREE.CylinderGeometry(0.9, 0.9, altura, 32);
+  let troncoGeometry = new THREE.CylinderGeometry(0.9, 0.9, altura, 5);
   let tronco = new THREE.Mesh(troncoGeometry, materialTronco);
   tronco.position.set(0.0, altura / 2, 0.0);
   arvore.add(tronco);
 
-  for (let i = 0; i < 10; i++) // cria varias folhas redondas com posicoes e tamanhos variados
+  for (let i = 0; i < 5; i++) // cria varias folhas redondas com posicoes e tamanhos variados
   {
     let raio = (Math.random() * (2.6 - 1.3) + 1.3); // varia o raio entre 1.3 e 2.6
     let x = (Math.random() * 2 - 1) * 2;            // varia x entre -2 e 2
@@ -48,7 +48,7 @@ function criaArvoreRedonda(x, z, tipo = 'normal', corFolhas = 'forestgreen', cor
 function criaFolhasRedondas(raio, x, y, z, corFolhas = 'forestgreen')
 {
   let materialFolhas = setDefaultMaterial(corFolhas);
-  let folhaGeometry = new THREE.SphereGeometry(raio, 32, 32);
+  let folhaGeometry = new THREE.SphereGeometry(raio, 10, 10);
   let folha = new THREE.Mesh(folhaGeometry, materialFolhas);
   folha.position.set(x, y, z);
   return folha;
@@ -68,7 +68,7 @@ function criaFolhasRedondasNeve(raio, x, y, z)
 {
   let folha = criaFolhasRedondas(raio, x, y, z, 'darkgreen');
   let materialNeve = setDefaultMaterial('snow');
-  let neveGeometry = new THREE.SphereGeometry(raio, 32, 32, 0, Math.PI * 2, 0, Math.PI * 0.4); // cria a parte de cima da folha com neve (metade da esfera)
+  let neveGeometry = new THREE.SphereGeometry(raio, 10, 10, 0, Math.PI * 2, 0, Math.PI * 0.4); // cria a parte de cima da folha com neve (metade da esfera)
   let neve = new THREE.Mesh(neveGeometry, materialNeve);
   neve.position.set(0, 0.1, 0); // posiciona a neve na parte de cima da folha
   folha.add(neve);
@@ -80,21 +80,21 @@ function criaArvoreTriangular(x, z, corFolhas = 'forestgreen', corTronco = 'sien
   let arvore = new THREE.Object3D(); // objeto para juntar os elementos da arvore
   
   let materialTronco = setDefaultMaterial(corTronco); // cria tronco
-  let troncoGeometry = new THREE.CylinderGeometry(0.9, 0.9, 3, 32);
+  let troncoGeometry = new THREE.CylinderGeometry(0.9, 0.9, 3, 5);
   let tronco = new THREE.Mesh(troncoGeometry, materialTronco);
   tronco.position.set(0.0, 1.5, 0.0);
   arvore.add(tronco);
   
   let materialFolhas = setDefaultMaterial(corFolhas);
-  let folhasTopoGeometry = new THREE.ConeGeometry(1.5, 2.5, 32); // cria folhas do topo
+  let folhasTopoGeometry = new THREE.ConeGeometry(1.5, 2.5, 5); // cria folhas do topo
   let folhasTopo = new THREE.Mesh(folhasTopoGeometry, materialFolhas);
   folhasTopo.position.set(0.0, 6.5, 0.0);
   arvore.add(folhasTopo);
-  let folhasMeioGeometry = new THREE.ConeGeometry(2, 3.5, 32); // cria folhas do meio
+  let folhasMeioGeometry = new THREE.ConeGeometry(2, 3.5, 5); // cria folhas do meio
   let folhasMeio = new THREE.Mesh(folhasMeioGeometry, materialFolhas);
   folhasMeio.position.set(0.0, 5.5, 0.0);
   arvore.add(folhasMeio);
-  let folhasBaseGeometry = new THREE.ConeGeometry(2.5, 4.5, 32); // cria folhas de baixo
+  let folhasBaseGeometry = new THREE.ConeGeometry(2.5, 4.5, 5); // cria folhas de baixo
   let folhasBase = new THREE.Mesh(folhasBaseGeometry, materialFolhas);
   folhasBase.position.set(0.0, 4.25, 0.0);
   arvore.add(folhasBase);
@@ -111,7 +111,7 @@ function criaArvoreTriangular(x, z, corFolhas = 'forestgreen', corTronco = 'sien
 function posicionaFrutos(x, y, z, corFruto) // ajuda a posicionar os frutos na arvore
 {
   let materialFrutos = setDefaultMaterial(corFruto);
-  let frutosGeometry = new THREE.SphereGeometry(0.3, 32, 32);
+  let frutosGeometry = new THREE.SphereGeometry(0.3, 2, 2);
   let fruto = new THREE.Mesh(frutosGeometry, materialFrutos);
   fruto.position.set(x, y, z);
   return fruto; // retorna o fruto pronto p ser adicionado
@@ -138,19 +138,19 @@ function criaArvoreTriangularNeve(x, z) // cria arvore com neve
   let arvore = criaArvoreTriangular(x, z, 'darkgreen'); // arvore base com verde mais escuro
   let materialNeve = setDefaultMaterial('snow');
 
-  let nevePontaGeometry = new THREE.ConeGeometry(0.6, 1, 32); // pontinha da arvore com neve
+  let nevePontaGeometry = new THREE.ConeGeometry(0.6, 1, 5); // pontinha da arvore com neve
   let nevePonta = new THREE.Mesh(nevePontaGeometry, materialNeve);
   nevePonta.position.set(0.0, 7.26, 0.0);
   arvore.add(nevePonta);
-  let neveTopoGeometry = new THREE.CylinderGeometry(1.2, 1.5, 0.5, 32); // neve da borda das folhas de cima
+  let neveTopoGeometry = new THREE.CylinderGeometry(1.2, 1.5, 0.5, 5); // neve da borda das folhas de cima
   let neveTopo = new THREE.Mesh(neveTopoGeometry, materialNeve);
   neveTopo.position.set(0.0, 5.51, 0.0); // 0.01 mais p cima p nao bugar
   arvore.add(neveTopo);
-  let neveMeioGeometry = new THREE.CylinderGeometry(1.71, 2, 0.5, 32); // neve da borda das folhas do meio
+  let neveMeioGeometry = new THREE.CylinderGeometry(1.71, 2, 0.5, 5); // neve da borda das folhas do meio
   let neveMeio = new THREE.Mesh(neveMeioGeometry, materialNeve);
   neveMeio.position.set(0.0, 4.01, 0.0);
   arvore.add(neveMeio);
-  let neveBaseGeometry = new THREE.CylinderGeometry(2.22, 2.5, 0.5, 32); // neve da borda das folhas de baixo
+  let neveBaseGeometry = new THREE.CylinderGeometry(2.22, 2.5, 0.5, 5); // neve da borda das folhas de baixo
   let neveBase = new THREE.Mesh(neveBaseGeometry, materialNeve);
   neveBase.position.set(0.0, 2.26, 0.0);
   arvore.add(neveBase); // adiciona as neves na arvore base

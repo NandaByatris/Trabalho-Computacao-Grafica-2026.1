@@ -53,9 +53,9 @@ const aviao = criarAviao();
 const aviaoContainer = new THREE.Object3D(); // Cria um objeto vazio (aviaoContainer) para conter o avião, permitindo que o avião seja controlado como um grupo, facilitando a aplicação de transformações como movimento e rotação ao avião como um todo, sem afetar diretamente a posição ou rotação individual do modelo do avião.
 aviaoContainer.add(aviao); // Adiciona o avião a um objeto vazio (aviaoContainer) para facilitar o controle do movimento do avião
 
-const anguloMaxRotacao = 0.6; // Define o ângulo máximo de rotação do avião em radianos, limitando a inclinação do avião para evitar que ele gire excessivamente quando a posição alvo da câmera estiver muito distante da posição atual do avião. O valor de 0.6 radianos é +- 34/35 graus.
+const anguloMaxRotacao = 0.5; // Define o ângulo máximo de rotação do avião em radianos, limitando a inclinação do avião para evitar que ele gire excessivamente quando a posição alvo da câmera estiver muito distante da posição atual do avião. O valor de 0.6 radianos é +- 34/35 graus.
 const limiarParadaRotacao= 1; // Define o limiar de parada para a rotação do avião, que é a distância mínima entre a posição alvo da câmera e a posição atual do avião no eixo X para que o avião comece a girar. Se a diferença no eixo X for menor que esse limiar, o avião permanecerá nivelado, evitando que ele gire desnecessariamente quando a posição alvo da câmera estiver muito próxima da posição atual do avião.  
-const velocidadeInclinacao = 0.05; // Define a velocidade de inclinação do avião,  para controlar a intensidade do efeito de inclinação do avião com base na posição do mouse. Um valor mais alto resultará em uma inclinação mais rápida e intensa, enquanto um valor mais baixo resultará em uma inclinação mais suave e lenta.
+const velocidadeInclinacao = 0.3; // Define a velocidade de inclinação do avião,  para controlar a intensidade do efeito de inclinação do avião com base na posição do mouse. Um valor mais alto resultará em uma inclinação mais rápida e intensa, enquanto um valor mais baixo resultará em uma inclinação mais suave e lenta.
 
 
 aviao.position.set(0, 0, -30);
@@ -94,7 +94,7 @@ function buildInterface() {
 
 function render() // Função de renderização que é chamada a cada frame para atualizar a cena
 {
-  //stats.update();
+  stats.update();
   const delta = clock.getDelta(); // Calcula o tempo decorrido desde o último frame usando o relógio, o que pode ser útil para animações ou movimentos suaves
 
   let limite = 50; // Define um limite para o movimento da câmera, para evitar que ela se mova muito longe do centro da cena  
@@ -119,6 +119,7 @@ function render() // Função de renderização que é chamada a cada frame para
   aviaoContainer.position.x += (target.x - aviaoContainer.position.x) * 0.05; // Atualiza a posição da câmera no eixo X para se aproximar da posição alvo, usando uma interpolação suave multiplicada por 0.05 para controlar a velocidade do movimento
   cameraBox.position.z -= 0.5; // Atualiza a posição da câmera no eixo Z para se aproximar da posição alvo, usando uma interpolação suave multiplicada por 0.05 para controlar a velocidade do movimento
   aviaoContainer.position.y += (target.y - aviaoContainer.position.y) * 0.05; // Mantém a posição da câmera no eixo Y constante em 15, para que a câmera se mova apenas no plano XZ
+  
   
   aviaoContainer.rotation.z += (anguloDesejado - aviaoContainer.rotation.z) * velocidadeInclinacao;  // Atualiza a rotação do avião no eixo Z para criar um efeito de inclinação com base na posição do mouse, multiplicando pela velocidade de inclinação para controlar a intensidade do efeito
   
