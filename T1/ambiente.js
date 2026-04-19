@@ -16,7 +16,7 @@ function criaArvoreRedonda(x, z, tipo = 'normal', corFolhas = 'forestgreen', cor
   const altura = (Math.random() * (7.0 - 5.0) + 5.0); // varia altura entre 5.0 e 7.0
   
   let materialTronco = setDefaultMaterial(corTronco);
-  let troncoGeometry = new THREE.CylinderGeometry(0.9, 0.9, altura, 3);
+  let troncoGeometry = new THREE.CylinderGeometry(0.9, 0.9, altura, 10);
   let tronco = new THREE.Mesh(troncoGeometry, materialTronco);
   tronco.position.set(0.0, altura / 2, 0.0);
   arvore.add(tronco);
@@ -47,7 +47,7 @@ function criaArvoreRedonda(x, z, tipo = 'normal', corFolhas = 'forestgreen', cor
 function criaFolhasRedondas(raio, x, y, z, corFolhas = 'forestgreen')
 {
   let materialFolhas = setDefaultMaterial(corFolhas);
-  let folhaGeometry = new THREE.SphereGeometry(raio, 7, 7);
+  let folhaGeometry = new THREE.SphereGeometry(raio, 20, 20);
   let folha = new THREE.Mesh(folhaGeometry, materialFolhas);
   folha.position.set(x, y, z);
   return folha;
@@ -66,7 +66,7 @@ function criaFolhasRedondasNeve(raio, x, y, z)
 {
   let folha = criaFolhasRedondas(raio, x, y, z, 'darkgreen');
   let materialNeve = setDefaultMaterial('snow');
-  let neveGeometry = new THREE.SphereGeometry(raio, 7, 7, 0, Math.PI * 2, 0, Math.PI * 0.4); // cria a parte de cima da folha com neve (metade da esfera)
+  let neveGeometry = new THREE.SphereGeometry(raio, 20, 20, 0, Math.PI * 2, 0, Math.PI * 0.4); // cria a parte de cima da folha com neve (metade da esfera)
   let neve = new THREE.Mesh(neveGeometry, materialNeve);
   neve.position.set(0, 0.1, 0); // posiciona a neve na parte de cima da folha
   folha.add(neve);
@@ -84,15 +84,15 @@ function criaArvoreTriangular(x, z, corFolhas = 'forestgreen', corTronco = 'sien
   arvore.add(tronco);
   
   let materialFolhas = setDefaultMaterial(corFolhas);
-  let folhasTopoGeometry = new THREE.ConeGeometry(1.5, 2.5, 5); // cria folhas do topo
+  let folhasTopoGeometry = new THREE.ConeGeometry(1.5, 2.5, 10); // cria folhas do topo
   let folhasTopo = new THREE.Mesh(folhasTopoGeometry, materialFolhas);
   folhasTopo.position.set(0.0, 6.5, 0.0);
   arvore.add(folhasTopo);
-  let folhasMeioGeometry = new THREE.ConeGeometry(2, 3.5, 5); // cria folhas do meio
+  let folhasMeioGeometry = new THREE.ConeGeometry(2, 3.5, 10); // cria folhas do meio
   let folhasMeio = new THREE.Mesh(folhasMeioGeometry, materialFolhas);
   folhasMeio.position.set(0.0, 5.5, 0.0);
   arvore.add(folhasMeio);
-  let folhasBaseGeometry = new THREE.ConeGeometry(2.5, 4.5, 5); // cria folhas de baixo
+  let folhasBaseGeometry = new THREE.ConeGeometry(2.5, 4.5, 10); // cria folhas de baixo
   let folhasBase = new THREE.Mesh(folhasBaseGeometry, materialFolhas);
   folhasBase.position.set(0.0, 4.25, 0.0);
   arvore.add(folhasBase);
@@ -109,7 +109,7 @@ function criaArvoreTriangular(x, z, corFolhas = 'forestgreen', corTronco = 'sien
 function posicionaFrutos(x, y, z, corFruto) // ajuda a posicionar os frutos na arvore
 {
   let materialFrutos = setDefaultMaterial(corFruto);
-  let frutosGeometry = new THREE.SphereGeometry(0.3, 1, 1);
+  let frutosGeometry = new THREE.SphereGeometry(0.3, 3, 3);
   let fruto = new THREE.Mesh(frutosGeometry, materialFrutos);
   fruto.position.set(x, y, z);
   return fruto; // retorna o fruto pronto p ser adicionado
@@ -131,19 +131,19 @@ function criaArvoreTriangularNeve(x, z) // cria arvore com neve
   let arvore = criaArvoreTriangular(x, z, 'darkgreen'); // arvore base com verde mais escuro
   let materialNeve = setDefaultMaterial('snow');
 
-  let nevePontaGeometry = new THREE.ConeGeometry(0.6, 1, 5); // pontinha da arvore com neve
+  let nevePontaGeometry = new THREE.ConeGeometry(0.6, 1, 10); // pontinha da arvore com neve
   let nevePonta = new THREE.Mesh(nevePontaGeometry, materialNeve);
   nevePonta.position.set(0.0, 7.26, 0.0);
   arvore.add(nevePonta);
-  let neveTopoGeometry = new THREE.CylinderGeometry(1.2, 1.5, 0.5, 5); // neve da borda das folhas de cima
+  let neveTopoGeometry = new THREE.CylinderGeometry(1.2, 1.5, 0.5, 10); // neve da borda das folhas de cima
   let neveTopo = new THREE.Mesh(neveTopoGeometry, materialNeve);
   neveTopo.position.set(0.0, 5.51, 0.0); // 0.01 mais p cima p nao bugar
   arvore.add(neveTopo);
-  let neveMeioGeometry = new THREE.CylinderGeometry(1.71, 2, 0.5, 5); // neve da borda das folhas do meio
+  let neveMeioGeometry = new THREE.CylinderGeometry(1.71, 2, 0.5, 10); // neve da borda das folhas do meio
   let neveMeio = new THREE.Mesh(neveMeioGeometry, materialNeve);
   neveMeio.position.set(0.0, 4.01, 0.0);
   arvore.add(neveMeio);
-  let neveBaseGeometry = new THREE.CylinderGeometry(2.22, 2.5, 0.5, 5); // neve da borda das folhas de baixo
+  let neveBaseGeometry = new THREE.CylinderGeometry(2.22, 2.5, 0.5, 10); // neve da borda das folhas de baixo
   let neveBase = new THREE.Mesh(neveBaseGeometry, materialNeve);
   neveBase.position.set(0.0, 2.26, 0.0);
   arvore.add(neveBase); // adiciona as neves na arvore base
@@ -172,8 +172,14 @@ function criaArvoreRedondaMaca(x, z) { return criaArvoreRedonda(x, z, 'frutos', 
 function criaArvoreRedondaLaranja(x, z) { return criaArvoreRedonda(x, z, 'frutos', 'chocolate'); } // cria arvore redonda de laranja
 
 function iniciaPosicoes() {    
-  const posicoesX = [-45, -20, 0, 30, -35, 0, 20, 45, -15, 10, 35, -45, 30, -25, -10, 5, -20, -35, 20, 45];
-  const posicoesZ = [-40, -30, -45, -35, -10, -20, -15, -20, -5, 5, 0, 10, 20, 10, 20, 30, 45, 30, 45, 40];
+  const posicoesX = [
+    -165, -140, -125, -95, -70, -60, -35, -30, 5, 30, 50, 55, 80, 110, 140, 155, 
+    -155, -115, -105, -80, -45, -15, -10, 10, 25, 45, 65, 95, 100, 120, 165
+  ];
+  const posicoesZ = [
+    -30, -10, -45, -25, -45, -10, -10, -40, -20, -30, -5, -40, -20, -25, -35, -5,
+    30, 10, 40, 20, 30, 35, 10, 45, 15, 30, 20, 5, 40, 10, 30
+  ];
 
   return { posicoesX, posicoesZ };
 }
@@ -181,7 +187,7 @@ function iniciaPosicoes() {
 export function criaCenarioVerao(x, y, z)
 {
   let ambiente = new THREE.Object3D();
-  let plane = createGroundPlaneWired(100, 100, 25, 25, 5, 'green', 'darkgreen');
+  let plane = createGroundPlaneWired(350, 100, 35, 10, 3, 'green', 'darkgreen');
   ambiente.add(plane);
 
   const { posicoesX, posicoesZ } = iniciaPosicoes();
@@ -205,7 +211,7 @@ export function criaCenarioVerao(x, y, z)
 export function criaCenarioInverno(x, y, z)
 {
   let ambiente = new THREE.Object3D();
-  let plane = createGroundPlaneWired(100, 100, 25, 25, 5, 'snow', 'lightgray');
+  let plane = createGroundPlaneWired(350, 100, 35, 10, 3, 'snow', 'lightgray');
   ambiente.add(plane);
   
   const { posicoesX, posicoesZ } = iniciaPosicoes();
@@ -229,7 +235,7 @@ export function criaCenarioInverno(x, y, z)
 export function criaCenarioOutono(x, y, z)
 {
   let ambiente = new THREE.Object3D();
-  let plane = createGroundPlaneWired(100, 100, 25, 25, 3, 'olive', 'darkgoldenrod');
+  let plane = createGroundPlaneWired(350, 100, 35, 10, 3, 'olive', 'darkgoldenrod');
   ambiente.add(plane);
 
   const { posicoesX, posicoesZ } = iniciaPosicoes();
@@ -253,7 +259,7 @@ export function criaCenarioOutono(x, y, z)
 export function criaCenarioPrimavera(x, y, z)
 {
   let ambiente = new THREE.Object3D();
-  let plane = createGroundPlaneWired(100, 100, 25, 25, 3, 'darkgreen', 'forestgreen');
+  let plane = createGroundPlaneWired(350, 100, 35, 10, 3, 'darkgreen', 'forestgreen');
   ambiente.add(plane);
 
   const { posicoesX, posicoesZ } = iniciaPosicoes();
@@ -281,18 +287,13 @@ export function criaCenarioPrimavera(x, y, z)
 }
 
 export function criaCenario(x, y, z, tipo = 'verao') {
-    let ambiente = new THREE.Object3D();
-    for (let i = 0; i < 4; i++) {   
-        if (tipo === 'verao') {
-            ambiente.add(criaCenarioVerao(i * 100 - 150, 0, 0));
-        } else if (tipo === 'inverno') {
-            ambiente.add(criaCenarioInverno(i * 100 - 150, 0, 0));
-        } else if (tipo === 'outono') {
-            ambiente.add(criaCenarioOutono(i * 100 - 150, 0, 0));
-        } else if (tipo === 'primavera') {
-            ambiente.add(criaCenarioPrimavera(i * 100 - 150, 0, 0));
-        }
+    if (tipo === 'verao') {
+      return criaCenarioVerao(x, y, z);
+    } else if (tipo === 'inverno') {
+      return criaCenarioInverno(x, y, z);
+    } else if (tipo === 'outono') {
+      return criaCenarioOutono(x, y, z);
+    } else if (tipo === 'primavera') {
+      return criaCenarioPrimavera(x, y, z);
     }
-    ambiente.position.set(x, y, z);
-    return ambiente;
 }
