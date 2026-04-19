@@ -1,4 +1,12 @@
 import * as THREE from  'three';
+import {initRenderer, 
+        initCamera,
+        initDefaultBasicLight,
+        setDefaultMaterial,
+        InfoBox,
+        onWindowResize,
+        createGroundPlaneXZ,
+        createGroundPlaneWired} from "../libs/util/util.js";
 
 export function criarAviao(){
     let aviao = new THREE.Group();
@@ -6,8 +14,11 @@ export function criarAviao(){
     const matDetalhe = new THREE.MeshStandardMaterial({ color: "#1e3a5f", metalness: 0.5, roughness: 0.3 });
     const matMotor  = new THREE.MeshStandardMaterial({ color: "#888c91", metalness: 0.8, roughness: 0.2 });
     const matVidro = new THREE.MeshStandardMaterial({ color: "#9bd3ff", metalness: 0.9,roughness: 0.05,transparent: true, opacity: 0.5});
-    
-    
+    // const matCorpo = setDefaultMaterial("#f5f5f5");
+    // const matDetalhe = setDefaultMaterial("#1e3a5f");
+    // const matMotor  = setDefaultMaterial("#888c91");
+    // const matVidro = setDefaultMaterial("#9bd3ff");
+
     // corpo do avião(a parte mais longa). 7 é o comprimento, 1.3 é a largura e a altura, e 32 é o número de segmentos.
     let corpoAviao = new THREE.Mesh(new THREE.CylinderGeometry(1.3,1.3,7,15), matCorpo);
     corpoAviao.rotation.z = Math.PI/2;
@@ -44,11 +55,11 @@ export function criarAviao(){
     
     //luzes nas asas do aviao. 0.2 é o raio, 32 é o número de segmentos. deixei uma vermelha e uma verde, 
     // e não criei um material separado só pra elas porque achei que não valia a pena, já que são só duas esferas pequenas e nao vamos usar esse material em outros lugares.
-    const luzEsquerda = new THREE.Mesh(new THREE.SphereGeometry(0.15,5,5), new THREE.MeshBasicMaterial({ color: "red" }));
+    const luzEsquerda = new THREE.Mesh(new THREE.SphereGeometry(0.15,5,5), setDefaultMaterial("red"));
     luzEsquerda.position.set(0,-0.2,-7.5);
     aviao.add(luzEsquerda);
 
-    const luzDireita = new THREE.Mesh(new THREE.SphereGeometry(0.15,5,5), new THREE.MeshBasicMaterial({ color: "green" }));
+    const luzDireita = new THREE.Mesh(new THREE.SphereGeometry(0.15,5,5), setDefaultMaterial("green"));
     luzDireita.position.set(0,-0.2,7.5);
     aviao.add(luzDireita);
 
